@@ -112,7 +112,7 @@
 
 \title{Statistics for Data Science Notes}
 \author{Andrew Sage - Stat 255: Lawrence University}
-\date{2021-09-12}
+\date{2021-09-25}
 
 \begin{document}
 \maketitle
@@ -559,6 +559,45 @@ China & 1272915272 & 1280428583\\
   can be found in \href{https://r4ds.had.co.nz/tidy-data.html}{R For
   Data Science by Wickham and Grolemund}.
 \end{itemize}
+
+\chapter{Introduction to Linear
+Models}\label{introduction-to-linear-models}
+
+\section{Models with a Categorical Explanatory
+Variable}\label{models-with-a-categorical-explanatory-variable}
+
+\subsection{Models with a Categorical Explanatory
+Variable}\label{models-with-a-categorical-explanatory-variable-1}
+
+Learning outcomes:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Fit model with categorical variables using R.\\
+\item
+  Interpret model coefficients.\\
+\item
+  Make predictions.\\
+\item
+  Calculate proportion of variation explained by model.
+\end{enumerate}
+
+We'll work with a set of 10 houses sold in Ames, IA between 2006 and
+2010.
+
+\subsection{Variation in Ames IA, House
+Prices}\label{variation-in-ames-ia-house-prices}
+
+Shown below are the prices of 10 houses sold in Ames, IA between 2006
+and 2010.
+
+\begin{verbatim}
+##  [1] 123.00 187.00 176.50 113.00 163.99 110.00  84.90 150.00 235.00 137.00
+\end{verbatim}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-21-1.pdf}
 
 \subsection{Predicting Price of New
 House}\label{predicting-price-of-new-house}
@@ -1508,7 +1547,7 @@ Model}\label{variation-explained-by-2-variable-model}
 \tightlist
 \item
   79.4\% of the variation in house price is explained by the model using
-  square feet as an explanatory variable.
+  square feet and neighborhood as an explanatory variables.
 \end{itemize}
 
 \includegraphics{_main_files/figure-latex/unnamed-chunk-68-1.pdf}
@@ -2553,7 +2592,7 @@ Interaction}\label{season-and-sex-with-interaction}
 & Male & Female\tabularnewline
 \midrule
 \endhead
-Fall & \(b_0\) & b\_0+b\_3\tabularnewline
+Fall & \(b_0\) & \(b_0+b_3\)\tabularnewline
 Spring & \(b_0+b_1\) & \(b_0+b_1 +b_3+b_4\)\tabularnewline
 Summer & \(b_0+b_2\) & \(b_0+b_2+b_3+b_5\)\tabularnewline
 \bottomrule
@@ -3125,7 +3164,7 @@ Male Bears: \[
 
 Female Bears: \[
 \widehat{\text{Weight}}= (70.43 -31.96) + (3.24 -1.04)\times\text{Age} \\
-= 38.46-2.20\times Age
+= 38.46 + 2.20\times Age
 \]
 
 \subsection{\texorpdfstring{Bears Interaction Model Predictions with
@@ -4507,13 +4546,13 @@ Lakes}\label{mercury-level-in-sample-of-53-florida-lakes}
 ##            Farm-13       0.05
 ##             George       0.15
 ##            Griffin       0.19
-##             Harney       0.77
-##               Hart       1.08
-##         Hatchineha       0.98
 \end{verbatim}
 
 \begin{verbatim}
 ##          Lake AvgMercury
+##        Harney       0.77
+##          Hart       1.08
+##    Hatchineha       0.98
 ##       Iamonia       0.63
 ##     Istokpoga       0.56
 ##       Jackson       0.41
@@ -4529,15 +4568,15 @@ Lakes}\label{mercury-level-in-sample-of-53-florida-lakes}
 ##    Ocean Pond       0.87
 ##  Ocheese Pond       0.56
 ##    Okeechobee       0.17
+\end{verbatim}
+
+\begin{verbatim}
+##          Lake AvgMercury
 ##        Orange       0.18
 ##   Panasoffkee       0.19
 ##        Parker       0.04
 ##        Placid       0.49
 ##        Puzzle       1.10
-\end{verbatim}
-
-\begin{verbatim}
-##          Lake AvgMercury
 ##        Rodman       0.16
 ##      Rousseau       0.10
 ##       Sampson       0.48
@@ -4553,10 +4592,22 @@ Lakes}\label{mercury-level-in-sample-of-53-florida-lakes}
 ##          Yale       0.27
 \end{verbatim}
 
+Sample Mean:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(FloridaLakes}\OperatorTok{$}\NormalTok{AvgMercury)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.5271698
+\end{verbatim}
+
 \subsection{Distribution of Mercury
 Levels}\label{distribution-of-mercury-levels}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-176-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-177-1.pdf}
 
 \begin{verbatim}
 ## # A tibble: 1 x 5
@@ -4612,13 +4663,13 @@ confidence interval for the mean mercury level for all Florida Lakes.
 ##            Farm-13       0.05
 ##             George       0.15
 ##            Griffin       0.19
-##             Harney       0.77
-##               Hart       1.08
-##         Hatchineha       0.98
 \end{verbatim}
 
 \begin{verbatim}
 ##          Lake AvgMercury
+##        Harney       0.77
+##          Hart       1.08
+##    Hatchineha       0.98
 ##       Iamonia       0.63
 ##     Istokpoga       0.56
 ##       Jackson       0.41
@@ -4634,15 +4685,15 @@ confidence interval for the mean mercury level for all Florida Lakes.
 ##    Ocean Pond       0.87
 ##  Ocheese Pond       0.56
 ##    Okeechobee       0.17
+\end{verbatim}
+
+\begin{verbatim}
+##          Lake AvgMercury
 ##        Orange       0.18
 ##   Panasoffkee       0.19
 ##        Parker       0.04
 ##        Placid       0.49
 ##        Puzzle       1.10
-\end{verbatim}
-
-\begin{verbatim}
-##          Lake AvgMercury
 ##        Rodman       0.16
 ##      Rousseau       0.10
 ##       Sampson       0.48
@@ -4657,6 +4708,8 @@ confidence interval for the mean mercury level for all Florida Lakes.
 ##       Wildcat       0.25
 ##          Yale       0.27
 \end{verbatim}
+
+Sample Mean:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4724,13 +4777,13 @@ a data frame, with or without replacement.
 ##     Griffin       0.19
 ##        Hart       1.08
 ##  Hatchineha       0.98
-##  Hatchineha       0.98
-##     Iamonia       0.63
-##   Istokpoga       0.56
 \end{verbatim}
 
 \begin{verbatim}
 ##        Lake AvgMercury
+##  Hatchineha       0.98
+##     Iamonia       0.63
+##   Istokpoga       0.56
 ##   Josephine       0.73
 ##   Josephine       0.73
 ##    Kingsley       0.34
@@ -4746,15 +4799,15 @@ a data frame, with or without replacement.
 ##  Okeechobee       0.17
 ##      Parker       0.04
 ##      Parker       0.04
-##      Placid       0.49
-##      Rodman       0.16
-##    Rousseau       0.10
-##     Sampson       0.48
-##     Sampson       0.48
 \end{verbatim}
 
 \begin{verbatim}
 ##          Lake AvgMercury
+##        Placid       0.49
+##        Rodman       0.16
+##      Rousseau       0.10
+##       Sampson       0.48
+##       Sampson       0.48
 ##       Sampson       0.48
 ##       Talquin       0.86
 ##       Talquin       0.86
@@ -4769,6 +4822,8 @@ a data frame, with or without replacement.
 ##       Wildcat       0.25
 ##          Yale       0.27
 \end{verbatim}
+
+Bootstrap Sample Mean:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4801,13 +4856,13 @@ a data frame, with or without replacement.
 ##             George       0.15
 ##            Griffin       0.19
 ##            Griffin       0.19
-##            Iamonia       0.63
-##            Iamonia       0.63
-##          Istokpoga       0.56
 \end{verbatim}
 
 \begin{verbatim}
 ##         Lake AvgMercury
+##      Iamonia       0.63
+##      Iamonia       0.63
+##    Istokpoga       0.56
 ##    Josephine       0.73
 ##    Kissimmee       0.59
 ##    Kissimmee       0.59
@@ -4823,15 +4878,15 @@ a data frame, with or without replacement.
 ##       Orange       0.18
 ##  Panasoffkee       0.19
 ##  Panasoffkee       0.19
-##  Panasoffkee       0.19
-##       Puzzle       1.10
-##       Puzzle       1.10
-##       Puzzle       1.10
-##       Rodman       0.16
 \end{verbatim}
 
 \begin{verbatim}
 ##          Lake AvgMercury
+##   Panasoffkee       0.19
+##        Puzzle       1.10
+##        Puzzle       1.10
+##        Puzzle       1.10
+##        Rodman       0.16
 ##        Rodman       0.16
 ##        Rodman       0.16
 ##         Shipp       0.21
@@ -4846,6 +4901,8 @@ a data frame, with or without replacement.
 ##          Weir       0.43
 ##          Yale       0.27
 \end{verbatim}
+
+Bootstrap Sample Mean:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4878,13 +4935,13 @@ a data frame, with or without replacement.
 ##        George       0.15
 ##          Hart       1.08
 ##          Hart       1.08
-##    Hatchineha       0.98
-##       Iamonia       0.63
-##       Jackson       0.41
 \end{verbatim}
 
 \begin{verbatim}
 ##          Lake AvgMercury
+##    Hatchineha       0.98
+##       Iamonia       0.63
+##       Jackson       0.41
 ##     Kissimmee       0.59
 ##        Louisa       0.84
 ##    Miccasukee       0.50
@@ -4900,15 +4957,15 @@ a data frame, with or without replacement.
 ##        Rodman       0.16
 ##        Rodman       0.16
 ##      Rousseau       0.10
+\end{verbatim}
+
+\begin{verbatim}
+##          Lake AvgMercury
 ##       Sampson       0.48
 ##       Sampson       0.48
 ##         Shipp       0.21
 ##       Talquin       0.86
 ##        Tarpon       0.52
-\end{verbatim}
-
-\begin{verbatim}
-##          Lake AvgMercury
 ##      Trafford       0.27
 ##      Trafford       0.27
 ##      Trafford       0.27
@@ -4923,6 +4980,8 @@ a data frame, with or without replacement.
 ##          Yale       0.27
 ##          Yale       0.27
 \end{verbatim}
+
+Bootstrap Sample Mean:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4955,13 +5014,13 @@ a data frame, with or without replacement.
 ##        Hart       1.08
 ##  Hatchineha       0.98
 ##  Hatchineha       0.98
-##  Hatchineha       0.98
-##   Istokpoga       0.56
-##     Jackson       0.41
 \end{verbatim}
 
 \begin{verbatim}
 ##         Lake AvgMercury
+##   Hatchineha       0.98
+##    Istokpoga       0.56
+##      Jackson       0.41
 ##     Kingsley       0.34
 ##   Miccasukee       0.50
 ##   Miccasukee       0.50
@@ -4977,15 +5036,15 @@ a data frame, with or without replacement.
 ##       Orange       0.18
 ##       Orange       0.18
 ##  Panasoffkee       0.19
-##       Placid       0.49
-##       Placid       0.49
-##       Placid       0.49
-##       Puzzle       1.10
-##     Rousseau       0.10
 \end{verbatim}
 
 \begin{verbatim}
 ##          Lake AvgMercury
+##        Placid       0.49
+##        Placid       0.49
+##        Placid       0.49
+##        Puzzle       1.10
+##      Rousseau       0.10
 ##      Rousseau       0.10
 ##       Sampson       0.48
 ##         Shipp       0.21
@@ -5000,6 +5059,8 @@ a data frame, with or without replacement.
 ##          Yale       0.27
 ##          Yale       0.27
 \end{verbatim}
+
+Bootstrap Sample Mean:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5032,13 +5093,13 @@ a data frame, with or without replacement.
 ##             Harney       0.77
 ##             Harney       0.77
 ##               Hart       1.08
-##         Hatchineha       0.98
-##          Lochloosa       0.34
-##          Lochloosa       0.34
 \end{verbatim}
 
 \begin{verbatim}
 ##        Lake AvgMercury
+##  Hatchineha       0.98
+##   Lochloosa       0.34
+##   Lochloosa       0.34
 ##      Louisa       0.84
 ##  Miccasukee       0.50
 ##  Miccasukee       0.50
@@ -5054,15 +5115,15 @@ a data frame, with or without replacement.
 ##      Orange       0.18
 ##      Orange       0.18
 ##      Placid       0.49
-##      Placid       0.49
-##      Puzzle       1.10
-##      Puzzle       1.10
-##      Rodman       0.16
-##    Rousseau       0.10
 \end{verbatim}
 
 \begin{verbatim}
 ##          Lake AvgMercury
+##        Placid       0.49
+##        Puzzle       1.10
+##        Puzzle       1.10
+##        Rodman       0.16
+##      Rousseau       0.10
 ##         Shipp       0.21
 ##         Shipp       0.21
 ##       Talquin       0.86
@@ -5077,6 +5138,8 @@ a data frame, with or without replacement.
 ##          Weir       0.43
 ##       Wildcat       0.25
 \end{verbatim}
+
+Bootstrap Sample Mean:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5116,7 +5179,7 @@ Mean}\label{florida-lakes-bootstrap-distribution-for-mean}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-208-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-209-1.pdf}
 
 \subsection{Bootstrap Percentile Interval for Mean Hg
 Level}\label{bootstrap-percentile-interval-for-mean-hg-level}
@@ -5140,7 +5203,7 @@ Level}\label{bootstrap-percentile-interval-for-mean-hg-level}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-210-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-211-1.pdf}
 
 We are 95\% confident that the mean mercury level is all Florida Lakes
 is between 0.44 and 0.62 ppm.
@@ -5166,7 +5229,7 @@ Level}\label{bootstrap-se-interval-for-mean-hg-level}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-212-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-213-1.pdf}
 
 We are 95\% confident that the mean mercury level is all Florida Lakes
 is between 0.43 and 0.62 ppm.
@@ -5185,7 +5248,7 @@ Error}\label{standard-deviation-and-standard-error}
   variability between individuals in the sample
 \end{itemize}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-213-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-214-1.pdf}
 
 Standard Deviation:
 
@@ -5202,7 +5265,7 @@ Standard Deviation:
 The standard deviation in mercury levels between individual lakes is
 0.341 ppm.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-215-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-216-1.pdf}
 
 Standard Error for Mean:
 
@@ -5314,7 +5377,7 @@ St.~Dev.}\label{lakes-bootstrap-percentile-ci-for-st.dev.}
 ## 0.2783774 0.3908507
 \end{verbatim}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-222-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-223-1.pdf}
 
 We are 95\% confident that the standard deviation in mercury level for
 all Florida Lakes is between 0.28 and 0.39 ppm.
@@ -5340,7 +5403,7 @@ Level}\label{bootstrap-se-interval-for-st.dev.-in-hg-level}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-224-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-225-1.pdf}
 
 We are 95\% confident that the standard deviation in mercury level is
 all Florida Lakes is between 0.28 and 0.4 ppm.
@@ -5363,7 +5426,7 @@ ppm}\label{bootstrap-percentile-ci-for-prop.-1-ppm}
 ## 0.03773585 0.20754717
 \end{verbatim}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-226-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-227-1.pdf}
 
 We are 95\% confident that the proportion of all Florida lakes with
 mercury level over 1 ppm is between 0.04 and 0.21.
@@ -5389,7 +5452,7 @@ ppm}\label{bootstrap-se-interval-for-prop-1-ppm}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-228-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-229-1.pdf}
 
 We are 95\% confident that the standard deviation in mercury level is
 all Florida Lakes is between 0.03 and 0.2 ppm.
@@ -5402,7 +5465,7 @@ bootstrap percentile interval is usually more reliable.
 \subsection{Bootstrap Percentile CI for
 Median}\label{bootstrap-percentile-ci-for-median}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-230-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-231-1.pdf}
 
 \begin{itemize}
 \item
@@ -5436,7 +5499,7 @@ Jitter plots can help us look for clusters and gaps.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-231-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-232-1.pdf}
 
 \subsection{Changing Binwidth in
 Histogram}\label{changing-binwidth-in-histogram}
@@ -5466,7 +5529,7 @@ Histogram}\label{changing-binwidth-in-histogram}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-232-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-233-1.pdf}
 
 \subsection{What Bootstrapping Does and Doesn't
 Do}\label{what-bootstrapping-does-and-doesnt-do}
@@ -5499,7 +5562,7 @@ We'll divide the state along route 50, which runs East-West, passing
 through Northern Orlando.
 
 \begin{figure}
-\includegraphics[width=0.3\linewidth]{Florida} \caption{from Google Maps}\label{fig:unnamed-chunk-233}
+\includegraphics[width=0.3\linewidth]{Florida} \caption{from Google Maps}\label{fig:unnamed-chunk-234}
 \end{figure}
 
 \subsection{Comparing Northern and Southern
@@ -5542,7 +5605,7 @@ Florida}\label{comparing-lakes-in-north-and-south-florida}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-235-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-236-1.pdf}
 
 \subsection{Comparing Lakes in North and South Florida
 (cont.)}\label{comparing-lakes-in-north-and-south-florida-cont.}
@@ -5685,7 +5748,7 @@ Diff.}\label{lakes-bootstrap-percentile-ci-for-avg.-diff.}
 ## 0.08095682 0.46122992
 \end{verbatim}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-240-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-241-1.pdf}
 
 We are 95\% confident the average mercury level in Southern Lakes is
 between 0.08 and 0.46 ppm higher than in Northern Florida.
@@ -5730,7 +5793,7 @@ discuss later.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-243-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-244-1.pdf}
 
 We are 95\% confident that the standard deviation in mercury level is
 all Florida Lakes is between 0.08 and 0.46 ppm.
@@ -5754,7 +5817,7 @@ This line was calculated using a sample of 110 cars, released in 2015.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-244-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-245-1.pdf}
 
 \subsection{Cars Acc060 Model Output}\label{cars-acc060-model-output}
 
@@ -5845,7 +5908,7 @@ Lines}\label{first-10-bootstrap-regression-lines}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-247-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-248-1.pdf}
 
 \subsection{Bootstrap Percentile CI for Slope of Cars Reg.
 Line}\label{bootstrap-percentile-ci-for-slope-of-cars-reg.-line}
@@ -5863,7 +5926,7 @@ Line}\label{bootstrap-percentile-ci-for-slope-of-cars-reg.-line}
 ## -8.751976 -5.670654
 \end{verbatim}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-249-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-250-1.pdf}
 
 We are 95\% confident that the average price of a new 2015 car decreases
 between -8.75 and -5.67 thousand dollars for each additional second it
@@ -5907,7 +5970,7 @@ line of the regression output.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-252-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-253-1.pdf}
 
 We are 95\% confident that the standard deviation in mercury level is
 all Florida Lakes is between -8.75 and -5.63 ppm.
@@ -5928,7 +5991,7 @@ Line}\label{bootstrap-percentile-ci-for-int.-of-cars-reg.-line}
 ##  76.54801 103.27401
 \end{verbatim}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-254-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-255-1.pdf}
 
 We are 95\% confident that the intercept for the regression line
 relating price to acceleration time is between 76.55 and 103.27 thousand
@@ -5973,7 +6036,7 @@ intercept in the regression output.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-257-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-258-1.pdf}
 
 We are 95\% confident that the standard deviation in mercury level is
 all Florida Lakes is between 76.31 and 103.5 ppm.
@@ -5995,7 +6058,7 @@ interpretations.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-258-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-259-1.pdf}
 
 \subsection{Model for Predicting Bear Weights
 (cont.)}\label{model-for-predicting-bear-weights-cont.}
@@ -6165,7 +6228,7 @@ The average weight gain per month for male bears is represented by
 ## 2.360746 5.970272
 \end{verbatim}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-262-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-263-1.pdf}
 
 We are 95\% confident that male bears gain between 2.36 and 5.97 pounds
 per month, on average.
@@ -6205,7 +6268,7 @@ Model}{Bootstrap SE CI for b\_1 in Bears Model}}\label{bootstrap-se-ci-for-b_1-i
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-264-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-265-1.pdf}
 
 There is a considerable discrepancy between the percentile and standard
 error confidence intervals. Since the bootstrap distribution for \(b_1\)
@@ -6235,7 +6298,7 @@ The average weight gain per month for female bears is represented by
 ## 1.399662 3.416039
 \end{verbatim}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-267-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-268-1.pdf}
 
 We are 95\% confident that female bears gain between 1.3996618 and
 3.416039 pounds per month, on average.
@@ -6264,7 +6327,7 @@ The mean weight of all 24 month old male bears is represented by
 ## 128.6692 168.9187
 \end{verbatim}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-270-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-271-1.pdf}
 
 We are 95\% confident that the mean weight of all 24 month old bears is
 between 128.6692134 and 168.9186551 pounds.
@@ -6298,29 +6361,10 @@ The mean weight of all 24 month old female bears is represented by
 \subsection{\texorpdfstring{Bootstrap Percentile CI for
 \((b_0 + b_2) + 24(b_1+b_3)\)}{Bootstrap Percentile CI for (b\_0 + b\_2) + 24(b\_1+b\_3)}}\label{bootstrap-percentile-ci-for-b_0-b_2-24b_1b_3-1}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-273-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-274-1.pdf}
 
 We are 95\% confident that the mean weight of all 24 month old female
 bears is between 76.0443239 and 112.5460455 pounds.
-
-\chapter{Simulation-Based Hypothesis
-Tests}\label{simulation-based-hypothesis-tests}
-
-\section{Introduction to Hypothesis Testing via
-Simulation}\label{introduction-to-hypothesis-testing-via-simulation}
-
-\subsection{Difference between North and
-South?}\label{difference-between-north-and-south}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{FloridaLakes,  }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Location, }\DataTypeTok{y=}\NormalTok{AvgMercury, }\DataTypeTok{fill=}\NormalTok{Location)) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{geom_boxplot}\NormalTok{() }\OperatorTok{+}\StringTok{   }\KeywordTok{geom_jitter}\NormalTok{() }\OperatorTok{+}\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Mercury Levels in Florida Lakes"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Location"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Mercury Level"}\NormalTok{) }\OperatorTok{+}\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{90}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{coord_flip}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{_main_files/figure-latex/unnamed-chunk-274-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -6799,7 +6843,7 @@ Investigation}\label{code-for-simulation-investigation}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-293-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-294-1.pdf}
 
 It appears unlikely that we would observe a value of \(b_1\) as extreme
 as 0.27195 ppm by chance, if there is really no relationship between
@@ -6855,7 +6899,7 @@ Difference}\label{recall-lakes-bootstrap-for-difference}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-297-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-298-1.pdf}
 
 We are 95\% confident the average mercury level in Southern Lakes is
 between 0.08 and 0.46 ppm higher than in Northern Florida.
@@ -6944,14 +6988,14 @@ Time?}\label{is-car-price-associated-with-acceleration-time}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-299-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-300-1.pdf}
 
 \(\widehat{Price} = b_0+b_1\times \text{Acc. Time} =89.9036 -7.1933\times\text{Acc. Time}\)
 
 \subsection{What if there really was no
 Relationship?}\label{what-if-there-really-was-no-relationship}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-300-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-301-1.pdf}
 
 Is it possible that there is really no relationship between price and
 acceleration time, and we just happened to choose a sample that led to a
@@ -7347,7 +7391,7 @@ Investigation}\label{code-for-acc060-simulation-investigation}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-317-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-318-1.pdf}
 
 It is extremely unlikely that we would observe a value of \(b_1\) as
 extreme as -7.1933 by chance, if there is really no relationship between
@@ -7391,7 +7435,7 @@ acceleration time.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-320-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-321-1.pdf}
 
 We are 95\% confident that the average price of a new 2015 car decreases
 between -8.75 and -5.67 thousand dollars for each additional second it
@@ -7410,7 +7454,7 @@ Size}\label{relationship-price-and-car-size}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-321-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-322-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7614,7 +7658,7 @@ price and size.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-327-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-328-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7672,7 +7716,7 @@ price and size.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-331-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-332-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7728,7 +7772,7 @@ price and size.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-335-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-336-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7784,7 +7828,7 @@ price and size.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-339-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-340-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7840,7 +7884,7 @@ price and size.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-343-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-344-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7887,7 +7931,7 @@ Results}\label{f-statistic-for-size-simulation-results}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-346-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-347-1.pdf}
 
 p-value:
 
@@ -8003,7 +8047,7 @@ Size}\label{code-for-simulation-based-test-of-prices-by-size}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-349-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-350-1.pdf}
 
 p-value:
 
@@ -8031,7 +8075,7 @@ p-value:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-351-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-352-1.pdf}
 
 p-value:
 
@@ -8058,7 +8102,7 @@ p-value:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-353-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-354-1.pdf}
 
 p-value:
 
@@ -8138,7 +8182,7 @@ When testing for differences between more than two groups:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-355-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-356-1.pdf}
 
 \subsection{Bear Weights by Season
 Model}\label{bear-weights-by-season-model}
@@ -8249,7 +8293,7 @@ Simulation}\label{bears-f-statistic-simulation}
 \subsection{F-statistic for Bears Season
 Simulation}\label{f-statistic-for-bears-season-simulation}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-359-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-360-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8345,7 +8389,7 @@ In Chapter 5, we'll explore more of the reasoning behind these
 approaches.
 
 \subsection{Difference between North and
-South?}\label{difference-between-north-and-south-1}
+South?}\label{difference-between-north-and-south}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8355,7 +8399,7 @@ South?}\label{difference-between-north-and-south-1}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-362-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-363-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8478,7 +8522,7 @@ Interpretations}\label{lakes-model-model-p-value-interpretations}
 \subsection{Recall Lakes Simulation
 Results}\label{recall-lakes-simulation-results}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-366-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-367-1.pdf}
 
 Simulation-based p-value:
 
@@ -8547,7 +8591,7 @@ Difference}\label{recall-lakes-bootstrap-ci-for-difference}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-371-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-372-1.pdf}
 
 We are 95\% confident the average mercury level in Southern Lakes is
 between 0.08 and 0.46 ppm higher than in Northern Florida.
@@ -8589,7 +8633,7 @@ P-value}\label{comparison-to-simulation-based-p-value}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-373-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-374-1.pdf}
 
 Simulation-Based p-value:
 
@@ -8638,7 +8682,7 @@ CI}\label{comparison-to-bootstrap-ci}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-377-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-378-1.pdf}
 
 We are 95\% confident that the average price of a new 2015 car decreases
 between -8.75 and -5.67 thousand dollars for each additional second it
@@ -8657,7 +8701,7 @@ price and size.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-378-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-379-1.pdf}
 
 \subsection{Theory-Based F-Test for
 Cars}\label{theory-based-f-test-for-cars}
@@ -8695,7 +8739,7 @@ F-Test}\label{comparison-to-simulation-based-f-test}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-380-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-381-1.pdf}
 
 Simulation-based p-value:
 
@@ -8755,7 +8799,7 @@ small vs midsize & \(b_1-b_2\) & 0.0711 & No evidence\tabularnewline
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-383-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-384-1.pdf}
 
 \subsection{Bears Seasons F-Test}\label{bears-seasons-f-test}
 
@@ -8781,7 +8825,7 @@ weight between seasons.
 \subsection{Comparison to Simulation-Based
 Test}\label{comparison-to-simulation-based-test}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-385-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-386-1.pdf}
 
 \begin{verbatim}
 ## [1] 0.3777
@@ -8927,7 +8971,7 @@ The average weight gain per month for male bears is represented by
 ## 2.360746 5.970272
 \end{verbatim}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-391-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-392-1.pdf}
 
 We are 95\% confident that male bears gain between 2.36 and 5.97 pounds
 per month, on average.
@@ -9096,7 +9140,7 @@ to O'Hare, and only the variables we're interested in.
 \subsection{Visualizing New York to Chicago
 Flights}\label{visualizing-new-york-to-chicago-flights}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-395-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-396-1.pdf}
 
 \begin{tabular}{l|r|r|r}
 \hline
@@ -9195,7 +9239,7 @@ and the birthweight of the baby. Data come from a sample of 80 babies
 born in North Carolina in 2004. Thirty of the mothers were smokers, and
 fifty were nonsmokers.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-400-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-401-1.pdf}
 
 \begin{tabular}{l|r|r|r}
 \hline
@@ -9382,7 +9426,7 @@ Mean}\label{standard-error-for-the-mean}
   variability between individuals in the sample.
 \end{itemize}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-405-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-406-1.pdf}
 
 Standard Deviation:
 
@@ -9399,7 +9443,7 @@ Standard Deviation:
 The standard deviation in mercury levels between individual lakes is
 0.341 ppm.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-407-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-408-1.pdf}
 
 Standard Error for Mean:
 
@@ -9474,7 +9518,7 @@ Lakes}\label{standard-error-in-r-output-for-lakes}
 \subsection{Standard Error for Difference in
 Means}\label{standard-error-for-difference-in-means}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-411-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-412-1.pdf}
 
 Standard Error for Mean:
 
@@ -9714,7 +9758,7 @@ Ex.1}\label{when-to-use-each-ci-method-ex.1}
 
 Mean mercury level for all Florida lakes:
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-419-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-420-1.pdf}
 
 It is appropriate to use any of the 3 CI methods since
 
@@ -9733,7 +9777,7 @@ Ex.2}\label{when-to-use-each-ci-method-ex.2}
 
 Slope of regression line in cars example
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-420-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-421-1.pdf}
 
 It is appropriate to use any of the 3 CI methods since
 
@@ -9753,7 +9797,7 @@ Ex.3}\label{when-to-use-each-ci-method-ex.3}
 
 Standard deviation of mercury level in Florida Lakes
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-421-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-422-1.pdf}
 
 \begin{itemize}
 \tightlist
@@ -9772,7 +9816,7 @@ Ex.4}\label{when-to-use-each-ci-method-ex.4}
 
 Regression slope in bears age model
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-422-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-423-1.pdf}
 
 \begin{itemize}
 \tightlist
@@ -9791,7 +9835,7 @@ Ex.5}\label{when-to-use-each-ci-method-ex.5}
 
 Median mercury level in Florida Lakes
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-423-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-424-1.pdf}
 
 \begin{itemize}
 \tightlist
@@ -9818,7 +9862,7 @@ Notice that when we used simulation to approximate the sampling
 distributions of statistics, many (but not all) of these turned out to
 be symmetric and bell-shaped.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-424-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-425-1.pdf}
 
 \subsection{Normal Distribution}\label{normal-distribution}
 
@@ -9831,7 +9875,7 @@ A normal distribution is defined by two parameters:\\
 
 This distribution is denoted \(\mathcal{N}(0, \sigma)\).
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-426-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-427-1.pdf}
 
 Note that for standard deviation \(\sigma\), \(\sigma^2\) is called the
 variance. Some books denote the normal distribution as
@@ -9852,9 +9896,9 @@ A t-distribution is a symmetric, bell-shaped curve, with thicker tails
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-427-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-428-1.pdf}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-429-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-430-1.pdf}
 
 \subsection{Normal Error Regression
 Model}\label{normal-error-regression-model}
@@ -9902,7 +9946,7 @@ time it is used varies due to factors such as
 Suppose that the actual amount dispensed varies from its expectation
 according to a \(\mathcal{N}(0,0.5)\) distribution.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-430-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-431-1.pdf}
 
 \includegraphics[width=1\linewidth]{Ice_Cream}
 
@@ -9968,19 +10012,19 @@ amount & 2.23 & 1.91 & 3.58 & 3.57 & 4.37 & 3.27 & 4.65 & 4.63 & 4.74 & 5.77 & 5
 \subsection{Scatterplot for Ice Cream Sample
 Data}\label{scatterplot-for-ice-cream-sample-data}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-435-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-436-1.pdf}
 
 The red line represents the expectation function \(E(Y_i) = 2X_i\).
 
 \subsection{What We Actually Get to
 See}\label{what-we-actually-get-to-see}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-436-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-437-1.pdf}
 
 \subsection{What We Actually Get to See
 (cont.)}\label{what-we-actually-get-to-see-cont.}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-437-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-438-1.pdf}
 
 The blue line represents the least squares regression line.
 
@@ -10060,19 +10104,19 @@ Remember that in a real situation, we would not know the values of
 \subsection{What We Actually Get to
 See}\label{what-we-actually-get-to-see-1}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-439-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-440-1.pdf}
 
 \subsection{What We Actually Get to See
 (cont.)}\label{what-we-actually-get-to-see-cont.-1}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-440-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-441-1.pdf}
 
 The blue line represents the least squares regression line.
 
 \subsection{True and Estimated Regression
 Line}\label{true-and-estimated-regression-line}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-441-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-442-1.pdf}
 
 The red line represents the true expectation function
 \(E(\text{Amount}) = 0 + 2\times\text{Time}\).\\
@@ -10080,17 +10124,6 @@ The blue line represents the estimated regression line
 \(\widehat{\text{Amount}} = -0.1299087 + 2.0312489\times\text{Time}\)
 
 \subsection{Second Sample}\label{second-sample}
-
-\includegraphics{_main_files/figure-latex/unnamed-chunk-442-1.pdf}
-
-The red line represents the expectation function \(E(Y_i) = 2X_i\).
-
-Estimated Regression Equation:
-\(\widehat{\text{Amount}} = -0.6196117 + 2.1936879\times \text{Time}\)
-
-Estimate of \(\sigma\): 0.4423186
-
-\subsection{Third Sample}\label{third-sample}
 
 \includegraphics{_main_files/figure-latex/unnamed-chunk-443-1.pdf}
 
@@ -10101,7 +10134,7 @@ Estimated Regression Equation:
 
 Estimate of \(\sigma\): 0.4939971
 
-\subsection{Fourth Sample}\label{fourth-sample}
+\subsection{Third Sample}\label{third-sample}
 
 \includegraphics{_main_files/figure-latex/unnamed-chunk-444-1.pdf}
 
@@ -10112,7 +10145,7 @@ Estimated Regression Equation:
 
 Estimate of \(\sigma\): 0.5718905
 
-\subsection{Fifth Sample}\label{fifth-sample}
+\subsection{Fourth Sample}\label{fourth-sample}
 
 \includegraphics{_main_files/figure-latex/unnamed-chunk-445-1.pdf}
 
@@ -10122,6 +10155,17 @@ Estimated Regression Equation:
 \(\widehat{\text{Amount}} = -0.4527901 + 2.2084662\times \text{Time}\)
 
 Estimate of \(\sigma\): 0.512594
+
+\subsection{Fifth Sample}\label{fifth-sample}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-446-1.pdf}
+
+The red line represents the expectation function \(E(Y_i) = 2X_i\).
+
+Estimated Regression Equation:
+\(\widehat{\text{Amount}} = 0.3384907 + 1.8865214\times \text{Time}\)
+
+Estimate of \(\sigma\): 0.5015054
 
 \subsection{Generate Many Samples from IC
 Example}\label{generate-many-samples-from-ic-example}
@@ -10169,7 +10213,7 @@ we'll use later.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-447-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-448-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10178,7 +10222,7 @@ we'll use later.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-448-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-449-1.pdf}
 
 \subsection{\texorpdfstring{Distribution of
 \(\frac{{b_j}-\beta_j}{\text{SE}(b_j)}\)}{Distribution of \textbackslash{}frac\{\{b\_j\}-\textbackslash{}beta\_j\}\{\textbackslash{}text\{SE\}(b\_j)\}}}\label{distribution-of-fracb_j-beta_jtextseb_j}
@@ -10245,7 +10289,7 @@ Example}{Theory-Based CI for \textbackslash{}beta\_0 in Ice Cream Example}}\labe
 \textbf{95\% confidence interval for \(\beta_0\):}
 
 \[
-b_0\pm t^*\text{SE}(b_0) = -0.4527901 \pm 2 \times 0.4492685
+b_0\pm t^*\text{SE}(b_0) = 0.3384907 \pm 2 \times 0.4395498
 \]
 
 \begin{Shaded}
@@ -10257,10 +10301,10 @@ b_0\pm t^*\text{SE}(b_0) = -0.4527901 \pm 2 \times 0.4492685
 \end{Shaded}
 
 \begin{verbatim}
-## [1] -1.3513270  0.4457469
+## [1] -0.5406089  1.2175903
 \end{verbatim}
 
-We can be 95\% confident that \(\beta_0\) is between -1.35 and 0.45.
+We can be 95\% confident that \(\beta_0\) is between -0.54 and 1.22.
 
 \subsection{\texorpdfstring{Theory-Based CI for \(\beta_1\) in Ice Cream
 Example}{Theory-Based CI for \textbackslash{}beta\_1 in Ice Cream Example}}\label{theory-based-ci-for-beta_1-in-ice-cream-example}
@@ -10268,7 +10312,7 @@ Example}{Theory-Based CI for \textbackslash{}beta\_1 in Ice Cream Example}}\labe
 \textbf{95\% confidence interval for \(\beta_1\):}
 
 \[
-b_1\pm 2\text{SE}(b_1) = 2.2084662 \pm 2 \times 0.180898
+b_1\pm 2\text{SE}(b_1) = 1.8865214 \pm 2 \times 0.1769848
 \]
 
 \begin{Shaded}
@@ -10280,12 +10324,12 @@ b_1\pm 2\text{SE}(b_1) = 2.2084662 \pm 2 \times 0.180898
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 1.846670 2.570262
+## [1] 1.532552 2.240491
 \end{verbatim}
 
-We can be 95\% confident that \(\beta_1\) is between 1.85 and 2.57,
+We can be 95\% confident that \(\beta_1\) is between 1.53 and 2.24,
 meaning that we expect that the average amount of ice cream dispensed
-per second held is between 1.85 and 2.57 oz.
+per second held is between 1.53 and 2.24 oz.
 
 \subsection{Confidence Interval in R}\label{confidence-interval-in-r}
 
@@ -10299,9 +10343,9 @@ automatically, using the \texttt{confint} command.
 \end{Shaded}
 
 \begin{verbatim}
-##                 2.5 %    97.5 %
-## (Intercept) -1.423376 0.5177955
-## time         1.817660 2.5992725
+##                  2.5 %   97.5 %
+## (Intercept) -0.6110989 1.288080
+## time         1.5041690 2.268874
 \end{verbatim}
 
 \subsection{\texorpdfstring{IC Example: Hypothesis Test for
@@ -10310,7 +10354,7 @@ automatically, using the \texttt{confint} command.
 Null Hypothesis: \(\beta_0=0\)
 
 Test Statistic:
-\(t=\frac{b_0-0}{\text{SE}(b_0)}=\frac{-0.4527901 - 0 }{0.4492685} = -1.0078385\)
+\(t=\frac{b_0-0}{\text{SE}(b_0)}=\frac{0.3384907 - 0 }{0.4395498} = 0.770085\)
 
 p-value:
 
@@ -10321,7 +10365,7 @@ p-value:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-453-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-454-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10330,7 +10374,7 @@ p-value:
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.3319236
+## [1] 0.4550165
 \end{verbatim}
 
 Since the p-value is large, it is plausible that \(\beta_0=0\)
@@ -10341,7 +10385,7 @@ Since the p-value is large, it is plausible that \(\beta_0=0\)
 Null Hypothesis: \(\beta_1=0\)
 
 Test Statistic:
-\(t=\frac{b_1-0}{\text{SE}(b_1)}=\frac{2.2084662 - 0 }{0.180898} = 12.2083504\)
+\(t=\frac{b_1-0}{\text{SE}(b_1)}=\frac{1.8865214 - 0 }{0.1769848} = 10.6592299\)
 
 p-value:
 
@@ -10352,7 +10396,7 @@ p-value:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-456-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-457-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10361,7 +10405,7 @@ p-value:
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.00000001699457
+## [1] 0.0000000853638
 \end{verbatim}
 
 Since the p-value is low, there is strong evidence against
@@ -10387,18 +10431,18 @@ output.
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -0.5741 -0.2707 -0.1347  0.1644  1.2702 
+## -1.0754 -0.1948  0.1047  0.1799  0.8812 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value    Pr(>|t|)    
-## (Intercept)  -0.4528     0.4493  -1.008       0.332    
-## time          2.2085     0.1809  12.208 0.000000017 ***
+##             Estimate Std. Error t value     Pr(>|t|)    
+## (Intercept)   0.3385     0.4395    0.77        0.455    
+## time          1.8865     0.1770   10.66 0.0000000854 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.5126 on 13 degrees of freedom
-## Multiple R-squared:  0.9198, Adjusted R-squared:  0.9136 
-## F-statistic:   149 on 1 and 13 DF,  p-value: 0.00000001699
+## Residual standard error: 0.5015 on 13 degrees of freedom
+## Multiple R-squared:  0.8973, Adjusted R-squared:  0.8894 
+## F-statistic: 113.6 on 1 and 13 DF,  p-value: 0.00000008536
 \end{verbatim}
 
 \subsection{Coefficients Table in R
@@ -10438,7 +10482,7 @@ Season}\label{recall-bear-weights-by-season}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-459-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-460-1.pdf}
 
 \subsection{Model for Bear Weights by Season
 Model}\label{model-for-bear-weights-by-season-model}
@@ -10497,7 +10541,7 @@ Season}\label{simulated-f-stats-for-bear-weights-by-season}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-462-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-463-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10515,7 +10559,7 @@ An {[}F distribution{]} is a right-skewed distribution. It is defined by
 two parameters, \(\nu_1, \nu_2\), called numerator and denominator
 degrees of freedom.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-464-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-465-1.pdf}
 
 \subsection{Distribution of
 F-Statistic}\label{distribution-of-f-statistic}
@@ -10587,7 +10631,7 @@ Price}\label{f-test-for-car-size-and-price}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-466-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-467-1.pdf}
 
 \subsection{F-Statistic for Car Size and
 Price}\label{f-statistic-for-car-size-and-price-1}
@@ -10617,7 +10661,7 @@ F-test}\label{recall-simulation-based-f-test}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-468-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-469-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -10706,7 +10750,7 @@ amount & 2.23 & 1.91 & 3.58 & 3.57 & 4.37 & 3.27 & 4.65 & 4.63 & 4.74 & 5.77 & 5
 \hline
 \end{tabular}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-472-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-473-1.pdf}
 
 In the estimation setting, we are trying o determine the location of the
 regression line for the entire population.
@@ -10729,7 +10773,7 @@ amount & 2.23 & 1.91 & 3.58 & 3.57 & 4.37 & 3.27 & 4.65 & 4.63 & 4.74 & 5.77 & 5
 \hline
 \end{tabular}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-474-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-475-1.pdf}
 
 \subsection{Recall Ice Cream Model
 Output}\label{recall-ice-cream-model-output}
@@ -10747,18 +10791,18 @@ Output}\label{recall-ice-cream-model-output}
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -0.5741 -0.2707 -0.1347  0.1644  1.2702 
+## -1.0754 -0.1948  0.1047  0.1799  0.8812 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value    Pr(>|t|)    
-## (Intercept)  -0.4528     0.4493  -1.008       0.332    
-## time          2.2085     0.1809  12.208 0.000000017 ***
+##             Estimate Std. Error t value     Pr(>|t|)    
+## (Intercept)   0.3385     0.4395    0.77        0.455    
+## time          1.8865     0.1770   10.66 0.0000000854 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.5126 on 13 degrees of freedom
-## Multiple R-squared:  0.9198, Adjusted R-squared:  0.9136 
-## F-statistic:   149 on 1 and 13 DF,  p-value: 0.00000001699
+## Residual standard error: 0.5015 on 13 degrees of freedom
+## Multiple R-squared:  0.8973, Adjusted R-squared:  0.8894 
+## F-statistic: 113.6 on 1 and 13 DF,  p-value: 0.00000008536
 \end{verbatim}
 
 \subsection{Estimation in SLR}\label{estimation-in-slr}
@@ -10798,7 +10842,7 @@ Confidence interval for \(E(Y | (X=1.5))\):
 \begin{aligned}
 & b_0+b_1x^* \pm t^*SE(\hat{Y}|X=x^*) \\
 & = b_0+b_1x^* \pm 2s\sqrt{\frac{1}{n}+ \frac{(x^*-\bar{x})^2}{\displaystyle\sum_{i=1}^n(x_i-\bar{x})^2}}  \\
-& = -0.4527901 + 2.2084662 \pm 20.512594 \sqrt{\frac{1}{15}+ \frac{(1.5-2.3733)^2}{8.02933}}
+& = 0.3384907 + 1.8865214 \pm 20.5015054 \sqrt{\frac{1}{15}+ \frac{(1.5-2.3733)^2}{8.02933}}
 \end{aligned}
 \]
 
@@ -10812,12 +10856,12 @@ R}\label{confidence-interval-for-expected-response-in-r}
 \end{Shaded}
 
 \begin{verbatim}
-##        fit      lwr      upr
-## 1 2.859909 2.414664 3.305154
+##        fit     lwr      upr
+## 1 3.168273 2.73266 3.603886
 \end{verbatim}
 
 We are 95\% confident that the mean amount dispensed when held for 1.5
-seconds is between 2.41 and 3.31 oz.
+seconds is between 2.73 and 3.6 oz.
 
 \subsection{Recall Uncertainty Between
 Individuals}\label{recall-uncertainty-between-individuals}
@@ -10881,12 +10925,12 @@ In general, a prediction interval is
 \end{Shaded}
 
 \begin{verbatim}
-##        fit      lwr      upr
-## 1 2.859909 2.414664 3.305154
+##        fit     lwr      upr
+## 1 3.168273 2.73266 3.603886
 \end{verbatim}
 
 We are 95\% confident that the mean amount of ice cream dispensed when
-the dispensor is held for 1.5 seconds is between 2.41 and 3.31 oz.
+the dispensor is held for 1.5 seconds is between 2.73 and 3.6 oz.
 
 \subsection{Prediction Interval in R}\label{prediction-interval-in-r}
 
@@ -10897,17 +10941,17 @@ the dispensor is held for 1.5 seconds is between 2.41 and 3.31 oz.
 \end{Shaded}
 
 \begin{verbatim}
-##        fit     lwr      upr
-## 1 2.859909 1.66636 4.053459
+##        fit      lwr      upr
+## 1 3.168273 2.000543 4.336003
 \end{verbatim}
 
 We are 95\% confident that in individual who holds the dispensor for 1.5
-seconds will get between 1.67 and 4.05 oz of ice cream.
+seconds will get between 2 and 4.34 oz of ice cream.
 
 \subsection{Confidence and Prediction
 Intervals}\label{confidence-and-prediction-intervals}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-481-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-482-1.pdf}
 
 The prediction interval (in red) is wider than the confidence interval
 (in blue), since it must account for variability between individuals, in
@@ -10934,7 +10978,7 @@ where \(\epsilon_i\sim\mathcal{N}(0, \sigma)\).
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-483-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-484-1.pdf}
 
 \subsection{Acc060 Model Output}\label{acc060-model-output}
 
@@ -11024,7 +11068,7 @@ to 60 mph in 7 seconds will cost between 18.2 and 60.9 thousand dollars.
 \subsection{Visualization of Intervals for Car
 Prices}\label{visualization-of-intervals-for-car-prices}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-487-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-488-1.pdf}
 
 \subsection{Intervals for Mercury Florida
 Lakes}\label{intervals-for-mercury-florida-lakes}
@@ -11041,7 +11085,7 @@ where \(\epsilon_i\sim\mathcal{N}(0, \sigma)\).
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-488-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-489-1.pdf}
 
 \subsection{Lakes Model Conclusions}\label{lakes-model-conclusions}
 
@@ -11249,7 +11293,7 @@ constant variance assumption.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-494-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-495-1.pdf}
 
 If there is only one explanatory variable, plotting the residuals
 against that variable reveals the same information.
@@ -11272,7 +11316,7 @@ Useful for assessing normality assumption.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-495-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-496-1.pdf}
 
 \subsection{Normal Quantile-Quantile (QQ)
 Plot}\label{normal-quantile-quantile-qq-plot}
@@ -11298,7 +11342,7 @@ against the expected quantiles of a normal distribution.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-496-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-497-1.pdf}
 
 \subsection{Checking Model Assumptions -
 Independence}\label{checking-model-assumptions---independence}
@@ -11379,7 +11423,7 @@ where \(\epsilon_i\sim\mathcal{N}(0, \sigma)\).
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-497-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-498-1.pdf}
 
 \subsection{What We're Assuming in Cars A060
 Model}\label{what-were-assuming-in-cars-a060-model}
@@ -11419,7 +11463,7 @@ Model}\label{checking-model-assumptions-for-a060-model}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-498-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-499-1.pdf}
 
 There is a funnel-shape in the residual plot, indicating a concern about
 the constant variance assumption. There appears to be more variability
@@ -11560,7 +11604,7 @@ dollars.
 \subsection{Confidence and Prediction Interval
 Illustration}\label{confidence-and-prediction-interval-illustration}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-506-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-507-1.pdf}
 
 \subsection{Concerns about Intervals and Model
 Assumptions}\label{concerns-about-intervals-and-model-assumptions}
@@ -11603,7 +11647,7 @@ where \(\epsilon_i\sim\mathcal{N}(0, \sigma)\).
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-507-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-508-1.pdf}
 
 \subsection{What We're Assuming in Lakes
 Model}\label{what-were-assuming-in-lakes-model}
@@ -11643,7 +11687,7 @@ Model}\label{checking-model-assumptions-for-lakes-model}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-508-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-509-1.pdf}
 
 Notice that we see two lines of predicted values and residuals. This
 makes sense since all lakes in North Florida will have the same
@@ -11814,7 +11858,7 @@ natural logarithm is commonly used.
 \subsection{Recall Model Assumptions for A060
 Model}\label{recall-model-assumptions-for-a060-model}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-512-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-513-1.pdf}
 
 \subsection{Recall Model Assumptions for A060
 Model}\label{recall-model-assumptions-for-a060-model-1}
@@ -11828,7 +11872,7 @@ Model}\label{recall-model-assumptions-for-a060-model-1}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-513-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-514-1.pdf}
 
 There is a funnel-shape in the residual plot, indicating a concern about
 the constant variance assumption. There appears to be more variability
@@ -11847,7 +11891,7 @@ Acc060}\label{plot-of-logprice-and-acc060}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-514-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-515-1.pdf}
 
 \subsection{Model for Log Transform}\label{model-for-log-transform}
 
@@ -11904,7 +11948,7 @@ assumptions are reasonable.
 \subsection{Model Assumption Check for Transformed
 Model}\label{model-assumption-check-for-transformed-model}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-516-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-517-1.pdf}
 
 There is still some concern about constant variance, though perhaps not
 as much. The normality assumption appears more reasonable.
@@ -12185,7 +12229,7 @@ Transformations}\label{comments-on-transformations}
 
 Exam 1 vs Exam 2 scores for intro stat students at another college
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-528-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-529-1.pdf}
 
 What is the relationship between scores on the two exams?
 
@@ -12193,7 +12237,7 @@ What is the relationship between scores on the two exams?
 
 Exam 1 vs Exam 2 scores for intro stat students at another college
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-529-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-530-1.pdf}
 
 How many of the 6 students who scored below 70 on Exam 1 improved their
 scores on Exam 2?
@@ -12231,7 +12275,7 @@ Effect}\label{simulating-regression-effect}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-530-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-531-1.pdf}
 
 This phenomon is called the \textbf{regression effect}.
 
@@ -12303,7 +12347,7 @@ luck.
 
 Wins by NFL teams in 2017 and 2018
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-533-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-534-1.pdf}
 
 \subsection{Other Examples of Regression
 Effect}\label{other-examples-of-regression-effect}
@@ -12380,7 +12424,7 @@ Statistical Learning} by James, Witten, Hastie, Tibshirani.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-535-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-536-1.pdf}
 
 \subsection{Linear Regression Model for Education
 Level}\label{linear-regression-model-for-education-level}
@@ -12398,7 +12442,7 @@ Level}\label{linear-regression-model-for-education-level}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-537-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-538-1.pdf}
 
 There are a lot of problems with this model!
 
@@ -12432,7 +12476,7 @@ There are a lot of problems with this model!
 The function \(f(t)=\frac{e^t}{1+e^{t}}\) takes any real number \(t\)
 and returns a number in the interval (0,1).
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-538-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-539-1.pdf}
 
 \subsection{The Logit Function}\label{the-logit-function}
 
@@ -12502,7 +12546,7 @@ Balance}\label{logistic-regression-model-for-balance}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-539-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-540-1.pdf}
 
 \subsection{Fitting the Logistic Regression Model in
 R}\label{fitting-the-logistic-regression-model-in-r}
@@ -12623,7 +12667,7 @@ Data}\label{recall-logistic-regression-curve-for-credit-card-data}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-544-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-545-1.pdf}
 
 \subsection{Recall Credit Card Model
 Output}\label{recall-credit-card-model-output}
@@ -12846,7 +12890,7 @@ Illustration}\label{multiple-logistic-model-illustration}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-548-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-549-1.pdf}
 
 \subsection{Multiple Logistic Regression
 Interpretation}\label{multiple-logistic-regression-interpretation}
@@ -13178,7 +13222,7 @@ Variables}\label{correlation-plot-for-quantitative-variables}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-553-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-554-1.pdf}
 
 \subsection{Multicollinearity in
 Modeling}\label{multicollinearity-in-modeling}
@@ -13546,7 +13590,7 @@ Relationship between Price, Size, and Drive
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-568-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-569-1.pdf}
 
 Information about size is already included, through the weight variable.
 Let's add drive type to the model.
@@ -13588,7 +13632,7 @@ Drive}\label{model-with-qtrmile-weight-and-drive}
 \subsection{Check of Model
 Assumptions}\label{check-of-model-assumptions}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-570-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-571-1.pdf}
 
 There is slight concern about constant variance, but otherwise, the
 model assumptions look good.
@@ -13697,7 +13741,7 @@ explanatory variable in our model.
 \subsection{Residual vs Explanatory Variable Plots for Cars
 Model}\label{residual-vs-explanatory-variable-plots-for-cars-model}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-575-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-576-1.pdf}
 
 There is no reason to be concerned about these plots.
 
@@ -13740,12 +13784,12 @@ Bears}\label{model-for-weights-of-bears}
 \subsection{Bears Model: Residuals by Explanatory Varaible
 Plots}\label{bears-model-residuals-by-explanatory-varaible-plots}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-577-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-578-1.pdf}
 
 \subsection{Bears Model: Residuals by Explanatory Variable
 Plots}\label{bears-model-residuals-by-explanatory-variable-plots}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-578-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-579-1.pdf}
 
 The fact that a few ages are much greater than the rest can cause these
 to have undue influence on the model. We also see some sign of curvature
@@ -13791,12 +13835,12 @@ Bears}\label{model-for-weights-of-bears-1}
 \subsection{Bears Model: Residuals by Explanatory Varaible
 Plots}\label{bears-model-residuals-by-explanatory-varaible-plots-1}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-580-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-581-1.pdf}
 
 \subsection{Bears Model: Residual
 Plots}\label{bears-model-residual-plots}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-581-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-582-1.pdf}
 
 \section{Modeling SAT scores: Simpson's Paradox and Quadratic
 Terms}\label{modeling-sat-scores-simpsons-paradox-and-quadratic-terms}
@@ -13841,7 +13885,7 @@ all 50 US states.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-584-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-585-1.pdf}
 
 What conclusion do you draw from the plot?
 
@@ -13897,7 +13941,7 @@ High = 49-81\%
 
 \subsection{A Closer Look}\label{a-closer-look-1}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-587-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-588-1.pdf}
 
 Now what conclusions do you draw from the plots?
 
@@ -13990,7 +14034,7 @@ Ratio}\label{add-student-to-teacher-ratio}
 \subsection{Residual Plots for SAT 3-variable
 Model}\label{residual-plots-for-sat-3-variable-model}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-591-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-592-1.pdf}
 
 There is some sign of a quadratic trend in the residual plot, creating
 concern about the linearity assumption.
@@ -13998,7 +14042,7 @@ concern about the linearity assumption.
 \subsection{Plots of Residuals Against
 Predictors}\label{plots-of-residuals-against-predictors}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-592-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-593-1.pdf}
 
 There is also a quadratic trend in the plot involving the fraction
 variable.
@@ -14039,7 +14083,7 @@ variable.
 \subsection{Residual Plots for Quadratic SAT
 Model}\label{residual-plots-for-quadratic-sat-model}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-594-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-595-1.pdf}
 
 \subsection{Model with Linear Term on
 Frac}\label{model-with-linear-term-on-frac}
@@ -14152,7 +14196,7 @@ expected to increase.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-597-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-598-1.pdf}
 
 We do see some possible quadratic trend, but we should be really careful
 about extrapolation.
@@ -14188,7 +14232,7 @@ capacity (in gallons) for a sample of 2015 new cars.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-598-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-599-1.pdf}
 
 \subsection{Polynomial Regression for Car Fuel
 Cap.}\label{polynomial-regression-for-car-fuel-cap.}
@@ -14221,7 +14265,7 @@ Model}\label{price-by-fuel-cap-linear-model}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-599-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-600-1.pdf}
 
 \subsection{Price by Fuel Cap: Quadratic
 Model}\label{price-by-fuel-cap-quadratic-model}
@@ -14233,7 +14277,7 @@ Model}\label{price-by-fuel-cap-quadratic-model}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-600-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-601-1.pdf}
 
 \subsection{Price by Fuel Cap: Cubic
 Model}\label{price-by-fuel-cap-cubic-model}
@@ -14246,7 +14290,7 @@ Model}\label{price-by-fuel-cap-cubic-model}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-601-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-602-1.pdf}
 
 \subsection{Price by Fuel Cap: Fourth-Degree
 Model}\label{price-by-fuel-cap-fourth-degree-model}
@@ -14259,7 +14303,7 @@ Model}\label{price-by-fuel-cap-fourth-degree-model}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-602-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-603-1.pdf}
 
 \subsection{Price by Fuel Cap: Fifth-Degree
 Model}\label{price-by-fuel-cap-fifth-degree-model}
@@ -14273,7 +14317,7 @@ Model}\label{price-by-fuel-cap-fifth-degree-model}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-603-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-604-1.pdf}
 
 \subsection{Price by Fuel Cap: Sixth-Degree
 Model}\label{price-by-fuel-cap-sixth-degree-model}
@@ -14284,7 +14328,7 @@ Model}\label{price-by-fuel-cap-sixth-degree-model}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-604-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-605-1.pdf}
 
 \subsection{Fitting Polynonimal Models in
 R}\label{fitting-polynonimal-models-in-r}
@@ -14337,7 +14381,7 @@ Example}\label{model-complexity-simulation-example}
 
 \subsection{Plot of Simulated Data}\label{plot-of-simulated-data}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-608-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-609-1.pdf}
 
 \subsection{Selecting a Random Sample of
 100}\label{selecting-a-random-sample-of-100}
@@ -14353,24 +14397,24 @@ Example}\label{model-complexity-simulation-example}
 
 \subsection{Plot Including Sample}\label{plot-including-sample}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-610-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-611-1.pdf}
 
 \subsection{Plot of Sample Data}\label{plot-of-sample-data}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-611-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-612-1.pdf}
 
 \subsection{Linear Model to Sample
 Data}\label{linear-model-to-sample-data}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-612-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-613-1.pdf}
 
 \subsection{Cubic Model}\label{cubic-model}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-613-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-614-1.pdf}
 
 \subsection{Eighth-Degree Model}\label{eighth-degree-model}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-614-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-615-1.pdf}
 
 \subsection{\texorpdfstring{\(R^2\) Values for Polynomial
 Models}{R\^{}2 Values for Polynomial Models}}\label{r2-values-for-polynomial-models}
@@ -14408,7 +14452,7 @@ Models}{R\^{}2 Values for Polynomial Models}}\label{r2-values-for-polynomial-mod
 \subsection{Predicting Data from Larger
 Population}\label{predicting-data-from-larger-population}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-619-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-620-1.pdf}
 
 Although the higher-degree model fits the sample best, it is clear that
 the linear model is the correct one, and would perform better on future
@@ -14698,33 +14742,33 @@ Suppose we have a set of 100 observations of a single explanatory
 variable \(x\), and response variable \(y\). A scatterplot of the data
 is shown below.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-626-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-627-1.pdf}
 
 \subsection{Constant Model to Sample
 Data}\label{constant-model-to-sample-data}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-627-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-628-1.pdf}
 
 \subsection{Linear Model to Sample
 Data}\label{linear-model-to-sample-data-1}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-628-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-629-1.pdf}
 
 \subsection{Quadratic Model}\label{quadratic-model}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-629-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-630-1.pdf}
 
 \subsection{Cubic Model}\label{cubic-model-1}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-630-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-631-1.pdf}
 
 \subsection{Quartic Model}\label{quartic-model}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-631-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-632-1.pdf}
 
 \subsection{Degree 8 Model}\label{degree-8-model}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-632-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-633-1.pdf}
 
 \subsection{Model Complexity}\label{model-complexity}
 
@@ -14738,7 +14782,7 @@ Data}\label{linear-model-to-sample-data-1}
   influence on the shape of the curve.
 \end{itemize}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-633-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-634-1.pdf}
 
 \subsection{New Data for Prediction}\label{new-data-for-prediction}
 
@@ -14967,7 +15011,7 @@ Degree & RMSPE\\
 
 \subsection{Graph of RMSPE}\label{graph-of-rmspe}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-644-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-645-1.pdf}
 
 \begin{itemize}
 \tightlist
@@ -15016,7 +15060,7 @@ In fact, the data were generated from the model
 \(y_i = 4.5x - 1.4x^2 + 0.1x^3 + \epsilon_i\), where
 \(\epsilon_i\sim\mathcal{N}(0,3)\)
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-646-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-647-1.pdf}
 
 \subsection{True Data Model}\label{true-data-model-1}
 
@@ -15026,28 +15070,28 @@ In fact, the data were generated from the model
 
 The yellow curve represents the true expected response curve.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-648-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-649-1.pdf}
 
 \subsection{Linear Model on Larger
 Population}\label{linear-model-on-larger-population}
 
 The yellow curve represents the true expected response curve.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-649-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-650-1.pdf}
 
 \subsection{Cubic Model on Larger
 Population}\label{cubic-model-on-larger-population}
 
 The yellow curve represents the true expected response curve.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-651-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-652-1.pdf}
 
 \subsection{Eighth-Degree Model on Larger
 Population}\label{eighth-degree-model-on-larger-population}
 
 The yellow curve represents the true expected response curve.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-653-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-654-1.pdf}
 
 The 8th degree model performs worse than the cubic. The extra terms
 cause the model to be ``too flexible,'' and it starts to model random
@@ -15057,7 +15101,7 @@ trend for the population. This is called \textbf{overfitting.}
 \subsection{Model Complexity, Training Error, and Test
 Error}\label{model-complexity-training-error-and-test-error}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-654-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-655-1.pdf}
 
 \section{Variance-Bias Tradeoff}\label{variance-bias-tradeoff}
 
@@ -15113,14 +15157,14 @@ in theory, approximate the true regression function correctly, it is too
 flexible, and is thrown off because of the influence of individual
 points with high degrees of variability.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-655-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-656-1.pdf}
 
 \subsection{Variance-Bias Tradeoff}\label{variance-bias-tradeoff-1}
 
 As model complexity (flexibility) increases, bias decreases. Variance,
 however, increases.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-656-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-657-1.pdf}
 
 In fact, it can be shown that:
 
@@ -15383,8 +15427,8 @@ potential explanatory variables.
 
 \begin{figure}
 \centering
-\includegraphics{_main_files/figure-latex/unnamed-chunk-668-1.pdf}
-\caption{\label{fig:unnamed-chunk-668}Prices}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-669-1.pdf}
+\caption{\label{fig:unnamed-chunk-669}Prices}
 \end{figure}
 
 \subsection{Prices by City}\label{prices-by-city}
@@ -15397,8 +15441,8 @@ potential explanatory variables.
 
 \begin{figure}
 \centering
-\includegraphics{_main_files/figure-latex/unnamed-chunk-669-1.pdf}
-\caption{\label{fig:unnamed-chunk-669}Price Distribution by City}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-670-1.pdf}
+\caption{\label{fig:unnamed-chunk-670}Price Distribution by City}
 \end{figure}
 
 \subsection{Price by City}\label{price-by-city}
@@ -15414,7 +15458,7 @@ potential explanatory variables.
 
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-670}Average House Price by City}
+\caption{\label{tab:unnamed-chunk-671}Average House Price by City}
 \centering
 \begin{tabular}[t]{l|r|r|r}
 \hline
@@ -15445,8 +15489,8 @@ SF & 215.1299 & 178.8882 & 77\\
 
 \begin{figure}
 \centering
-\includegraphics{_main_files/figure-latex/unnamed-chunk-671-1.pdf}
-\caption{\label{fig:unnamed-chunk-671}Price by Bedrooms}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-672-1.pdf}
+\caption{\label{fig:unnamed-chunk-672}Price by Bedrooms}
 \end{figure}
 
 \subsection{Correlation Plot}\label{correlation-plot}
@@ -15462,8 +15506,8 @@ SF & 215.1299 & 178.8882 & 77\\
 
 \begin{figure}
 \centering
-\includegraphics{_main_files/figure-latex/unnamed-chunk-672-1.pdf}
-\caption{\label{fig:unnamed-chunk-672}Correlation Plot for Quantitative
+\includegraphics{_main_files/figure-latex/unnamed-chunk-673-1.pdf}
+\caption{\label{fig:unnamed-chunk-673}Correlation Plot for Quantitative
 Variables}
 \end{figure}
 
@@ -15480,7 +15524,7 @@ Variables}
 
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-673}Average Price by Room Type}
+\caption{\label{tab:unnamed-chunk-674}Average Price by Room Type}
 \centering
 \begin{tabular}[t]{l|r|r|r}
 \hline
@@ -15509,7 +15553,7 @@ Policy}\label{price-by-cancellation-policy}
 
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-674}Average House Price by Cancellation Policy and Cleaning Fee}
+\caption{\label{tab:unnamed-chunk-675}Average House Price by Cancellation Policy and Cleaning Fee}
 \centering
 \begin{tabular}[t]{l|l|r|r|r}
 \hline
@@ -15562,8 +15606,8 @@ We convert the host response rate variable to numeric.
 
 \begin{figure}
 \centering
-\includegraphics{_main_files/figure-latex/unnamed-chunk-676-1.pdf}
-\caption{\label{fig:unnamed-chunk-676}Price by Host Response Rate}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-677-1.pdf}
+\caption{\label{fig:unnamed-chunk-677}Price by Host Response Rate}
 \end{figure}
 
 \subsection{More Variable Engineering}\label{more-variable-engineering}
@@ -15637,8 +15681,8 @@ variable, we'll get rid of the original one.
 
 \begin{figure}
 \centering
-\includegraphics{_main_files/figure-latex/unnamed-chunk-679-1.pdf}
-\caption{\label{fig:unnamed-chunk-679}Price Distribution by Property Type}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-680-1.pdf}
+\caption{\label{fig:unnamed-chunk-680}Price Distribution by Property Type}
 \end{figure}
 
 \subsection{Price by Review}\label{price-by-review}
@@ -15654,7 +15698,7 @@ variable, we'll get rid of the original one.
 
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-680}Average Price by Recent Review}
+\caption{\label{tab:unnamed-chunk-681}Average Price by Recent Review}
 \centering
 \begin{tabular}[t]{l|r|r|r}
 \hline
@@ -15680,7 +15724,7 @@ TRUE & 148.8005 & 132.5472 & 777\\
 
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-681}Average Price by Day of Review}
+\caption{\label{tab:unnamed-chunk-682}Average Price by Day of Review}
 \centering
 \begin{tabular}[t]{l|r|r|r}
 \hline
@@ -16016,7 +16060,7 @@ We'll create residual plots for this model.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-694-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-695-1.pdf}
 
 \subsection{Residul by Predictor
 Plots}\label{residul-by-predictor-plots}
@@ -16035,7 +16079,7 @@ Plots}\label{residul-by-predictor-plots}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-695-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-696-1.pdf}
 
 \subsection{Predictions on Test Data}\label{predictions-on-test-data}
 
@@ -16542,7 +16586,7 @@ y & Pred\_OLS\_0 & Pred\_Ridge0.5 & Pred\_Ridge1 & Pred\_Ridge2\\
   \(\lambda\)
 \end{itemize}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-718-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-719-1.pdf}
 
 \subsection{Ridge Regression on AirBnB
 Dataset}\label{ridge-regression-on-airbnb-dataset}
@@ -16577,7 +16621,7 @@ Dataset}\label{ridge-regression-on-airbnb-dataset}
 \subsection{\texorpdfstring{Ridge Regression MSPE by
 \(\lambda\)}{Ridge Regression MSPE by \textbackslash{}lambda}}\label{ridge-regression-mspe-by-lambda}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-722-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-723-1.pdf}
 
 \subsection{Ridge Regression Coefficients for Optimal
 Model}\label{ridge-regression-coefficients-for-optimal-model}
@@ -16644,7 +16688,7 @@ Dataset}\label{lasso-regression-on-airbnb-dataset}
 \subsection{\texorpdfstring{Lasso Regression MSPE by
 \(\lambda\)}{Lasso Regression MSPE by \textbackslash{}lambda}}\label{lasso-regression-mspe-by-lambda}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-726-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-727-1.pdf}
 
 \subsection{OLS, Ridge, Lasso
 Coefficients}\label{ols-ridge-lasso-coefficients}
@@ -16736,7 +16780,7 @@ Ridge}\label{comparing-rmspe-for-ols-lasso-ridge}
 
 \subsection{Decision Tree Example}\label{decision-tree-example}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-731-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-732-1.pdf}
 
 \begin{itemize}
 \item
@@ -16787,7 +16831,7 @@ Tree}\label{partitioning-in-a-decision-tree}
 ## y    155
 \end{verbatim}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-733-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-734-1.pdf}
 
 \subsection{\texorpdfstring{One Possible Split
 (\(x_1 < 5.5\))}{One Possible Split (x\_1 \textless{} 5.5)}}\label{one-possible-split-x_1-5.5}
@@ -16795,7 +16839,7 @@ Tree}\label{partitioning-in-a-decision-tree}
 We could split the data into 2 groups depending on whether
 \(x_1 < 5.5\).
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-734-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-735-1.pdf}
 
 \subsection{\texorpdfstring{One Possible Split (\(x_1 < 5.5\))
 (cont.)}{One Possible Split (x\_1 \textless{} 5.5) (cont.)}}\label{one-possible-split-x_1-5.5-cont.}
@@ -16836,7 +16880,7 @@ We could split the data into 2 groups depending on whether
 We could split the data into 2 groups depending on whether
 \(x_1 < 6.5\).
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-735-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-736-1.pdf}
 
 \subsection{\texorpdfstring{Second Possible Split (\(x_1 < 6.5\))
 (cont.)}{Second Possible Split (x\_1 \textless{} 6.5) (cont.)}}\label{second-possible-split-x_1-6.5-cont.}
@@ -16879,7 +16923,7 @@ The split at \(x1 < 6.5\) is better than \(x_1<5.5\)
 We could split the data into 2 groups depending on whether
 \(x_2 < 5.5\).
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-736-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-737-1.pdf}
 
 \subsection{\texorpdfstring{Third Possible Split (\(x_2 < 5.5\))
 (cont.)}{Third Possible Split (x\_2 \textless{} 5.5) (cont.)}}\label{third-possible-split-x_2-5.5-cont.}
@@ -16929,11 +16973,11 @@ We could split the data into 2 groups depending on whether
 
 \subsection{First Split}\label{first-split}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-737-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-738-1.pdf}
 
 \subsection{First Split in the Tree}\label{first-split-in-the-tree}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-738-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-739-1.pdf}
 
 \subsection{Next Splits}\label{next-splits}
 
@@ -16945,11 +16989,11 @@ We could split the data into 2 groups depending on whether
   is best split on \(x_1 < 8.5\).
 \end{itemize}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-739-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-740-1.pdf}
 
 \subsection{Next Splits in Tree}\label{next-splits-in-tree}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-740-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-741-1.pdf}
 
 \subsection{Recursive Partitioning}\label{recursive-partitioning}
 
@@ -16963,7 +17007,7 @@ We could split the data into 2 groups depending on whether
 
 \subsection{Tree on AirBnB Data}\label{tree-on-airbnb-data}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-741-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-742-1.pdf}
 
 \subsection{Model Complexity in Trees}\label{model-complexity-in-trees}
 
@@ -17009,7 +17053,7 @@ Data}\label{cross-validation-on-airbnb-data}
 ## 13 0.005336699
 \end{verbatim}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-743-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-744-1.pdf}
 
 \subsection{Comparing OLS, Lasso, Ridge, and
 Tree}\label{comparing-ols-lasso-ridge-and-tree}
@@ -17103,23 +17147,23 @@ best in prediction.
 
 \subsection{Price of 2015 New Cars}\label{price-of-2015-new-cars}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-746-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-747-1.pdf}
 
 \subsection{Two Models with High Bias}\label{two-models-with-high-bias}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-747-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-748-1.pdf}
 
 \subsection{Cubic Model}\label{cubic-model-2}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-748-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-749-1.pdf}
 
 \subsection{Cubic Splines}\label{cubic-splines}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-749-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-750-1.pdf}
 
 \subsection{Cubic Splines}\label{cubic-splines-1}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-750-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-751-1.pdf}
 
 \begin{itemize}
 \tightlist
@@ -17129,17 +17173,17 @@ best in prediction.
 
 \subsection{Cubic Spline with 5 Knots}\label{cubic-spline-with-5-knots}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-751-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-752-1.pdf}
 
 \subsection{Cubic Spline with 10
 Knots}\label{cubic-spline-with-10-knots}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-752-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-753-1.pdf}
 
 \subsection{Cubic Spline with 20
 Knots}\label{cubic-spline-with-20-knots}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-753-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-754-1.pdf}
 
 \subsection{Model Evaluation}\label{model-evaluation}
 
@@ -17151,7 +17195,7 @@ Knots}\label{cubic-spline-with-20-knots}
   calculated mean square prediction error (MSPE)
 \end{itemize}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-754-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-755-1.pdf}
 
 \subsection{Implementation of Splines}\label{implementation-of-splines}
 
