@@ -2074,534 +2074,170 @@ predict(Cars_M_A060_L_Int, newdata=data.frame(Acc060=10, Length=150))
 
 ## Sampling Variability and Margin of Error
 
-### Sampling Variability
+### Estimation From a Sample
 
-* Next, we turn our attention to the topic of quantifying uncertainty associated with a sample or experiment performed using random assignment.    
+We are interested in estimating the proportion of blues among all M&M's produced.  
 
-* Our goal is to generalize results to a larger population.     
 
-* If our sample was collected in a way that is not representative of a larger population of interest, then we should be cautious about generalizing our results. 
+If this seems trivial, imagine estimating:
 
-* If we already have data about the entire population we are interested in, then these results are not relevant.    
+1. The proportion of patients who experience pain relief after taking a certain medication.   
 
-### Election Polling Example
+2. The proportion of defective car batteries among all car batteries produced by a manufacturer.   
 
-A Washington Post [poll](https://www.washingtonpost.com/context/sept-8-13-2020-washington-post-abc-news-poll-of-minnesota-and-wisconsin/8e5dbd4b-4746-4e45-821e-eb8c8645d5c1/), of 702 registered voters in the state of Wisconsin, taken from September 8-13, 2020 showed that:   
+3. The proportion of all voters who support a particular candidate.   
 
-* 50% intend to vote for Joe Biden     
-* 46% intend to vote for Donald Trump    
-* 4% weren't sure or intend to vote for other candidates
+In each situation, it is not realistic to believe we could observe all individuals of interest (i.e. our population).   
 
-Is this strong enough information to say that Joe Biden is ahead among all voters in Wisconsin? Is it possible that Biden is not really ahead, and the poll just happened to sample more of his supporters but random chance? 
+Instead, we observe only a sample and try to make inferences about the population based on the sample.   
 
+### A Sample of M&M
 
-### Investigation by Simulation
-
-**Key Questions:**    
-
-By how much could proportions in a random sample of 702 voters plausibly differ from proportions for all Wisconsin voters?
-
-
-We'll investigate this using the following steps:
-
-1. Assume we know the percentage of voters in the state supporting each candidate.   
-2. Simulate taking random samples of 702 voters. Record how far the poll result differs from those of the population.   
-
-
-### Larger Population
-
-<div style="float: left; width: 50%;">
-
-
-* As of August 1, 2020, there were 3,420,587 registered voters in the state of Wisconsin. 
-
-* We'll assume (hypothetically) that for the upcoming election:
-     - 1,641,882 (48%) plan to vote for the Biden    
-     - 1,641,882 (48%) plan to vote for the Trump     
-     - 136,823 (4%) plan to vote for a third-party or independent candidate
-     
-</div>
-
-<div style="float: left; width: 50%;">
-
-```{r, echo=FALSE, fig.height=4, fig.width=3}
-Candidate <- c("Biden", "Trump", "Other")
-Percentage <- c(48,48,4)
-Populationdf <- data.frame(Candidate, Percentage)
-
-Populationdf$Candidate <- factor(Populationdf$Candidate, levels = c("Biden", "Trump", "Other"))
-
-ggplot(data=Populationdf,aes(x=Candidate, y=Percentage)) +
-  geom_bar(mapping=aes(x=Candidate, y=Percentage), stat = "identity", fill="lightblue") + 
-  geom_text(aes(label=paste(Percentage, "%")), vjust=1.6, color="white", size=3.5)
-
-```
-
-
-
-### A sample of 702 voters
-
-```{r, include=FALSE}
-set.seed(09152020)
-```
-
-
-```{r}
-Vote <- factor(c(rep("Biden", 1641882), rep("Trump", 1641882), rep("Other", 136823))) 
-Population <- as.data.frame(Vote)
-```
-
-<div style="float: left; width: 60%;">
-
-
-```{r}
-Sample <- sample_n(Population, 702, replace=FALSE)
-```
-
-Population Summary:
-
-```{r}
-summary(Population$Vote)
-```
-
-Results in random sample of 702 voters: 
-
-```{r}
-summary(Sample$Vote)
-```
-
-</div> 
-
-<div style="float: right; width: 40%;">
-
-```{r, echo=FALSE, fig.height=6, fig.width=3}
-Candidate <- c("Biden", "Other", "Trump")
-Percentage <- round(summary(Sample$Vote)/length(Sample$Vote)*100,1)
-Sampledf <- data.frame(Candidate, Percentage)
-
-Sampledf$Candidate <- factor(Sampledf$Candidate, levels = c("Biden", "Trump", "Other"))
-
-ggplot(data=Sampledf,aes(x=Candidate, y=Percentage)) +
-  geom_bar(mapping=aes(x=Candidate, y=Percentage), stat = "identity", fill="lightblue") + 
-  geom_text(aes(label=paste(Percentage, "%")), vjust=1.6, color="white", size=3.5)
-```
-
-### A Second Sample of 702 Voters
-
-Let's simulate taking another random sample of 702 voters. 
-
-<div style="float: left; width: 60%;">
-
-
-```{r}
-Sample <- sample_n(Population, 702, replace=FALSE)
-```
-
-Population Summary:
-
-```{r}
-summary(Population$Vote)
-```
-
-Results in random sample of 702 voters: 
-
-```{r}
-summary(Sample$Vote)
-```
-
-</div>
-<div style="float: right; width: 40%;">
-
-```{r, echo=FALSE, fig.height=6, fig.width=3}
-Candidate <- c("Biden", "Other", "Trump")
-Percentage <- round(summary(Sample$Vote)/length(Sample$Vote)*100,1)
-Sampledf <- data.frame(Candidate, Percentage)
-
-Sampledf$Candidate <- factor(Sampledf$Candidate, levels = c("Biden", "Trump", "Other"))
-
-ggplot(data=Sampledf,aes(x=Candidate, y=Percentage)) +
-  geom_bar(mapping=aes(x=Candidate, y=Percentage), stat = "identity", fill="lightblue") + 
-  geom_text(aes(label=paste(Percentage, "%")), vjust=1.6, color="white", size=3.5)
-```
-
-### A Third Sample of 702 Voters
-
-Let's simulate taking another third random sample of 702 voters. 
-
-<div style="float: left; width: 60%;">
-
-```{r}
-Sample <- sample_n(Population, 702, replace=FALSE)
-```
-
-Population Summary:
-
-```{r}
-summary(Population$Vote)
-```
-
-Results in random sample of 702 voters: 
-
-```{r}
-summary(Sample$Vote)
-```
-
-</div>
-
-<div style="float: right; width: 40%;">
-```{r, echo=FALSE, fig.height=6, fig.width=3}
-Candidate <- c("Biden", "Other", "Trump")
-Percentage <- round(summary(Sample$Vote)/length(Sample$Vote)*100,1)
-Sampledf <- data.frame(Candidate, Percentage)
-
-Sampledf$Candidate <- factor(Sampledf$Candidate, levels = c("Biden", "Trump", "Other"))
-
-ggplot(data=Sampledf,aes(x=Candidate, y=Percentage)) +
-  geom_bar(mapping=aes(x=Candidate, y=Percentage), stat = "identity", fill="lightblue") + 
-  geom_text(aes(label=paste(Percentage, "%")), vjust=1.6, color="white", size=3.5)
-```
-
-
-### A Fourth Sample of 702 Voters
-
-<div style="float: left; width: 60%;">
-
-Let's simulate taking another fourth random sample of 702 voters. 
-
-```{r}
-Sample <- sample_n(Population, 702, replace=FALSE)
-```
-
-Population Summary:
-
-```{r}
-summary(Population$Vote)
-```
-
-Results in random sample of 702 voters: 
-
-```{r}
-summary(Sample$Vote)
-```
-
-</div>
-
-<div style="float: right; width: 40%;">
-```{r, echo=FALSE, fig.height=6, fig.width=3}
-Candidate <- c("Biden", "Other", "Trump")
-Percentage <- round(summary(Sample$Vote)/length(Sample$Vote)*100,1)
-Sampledf <- data.frame(Candidate, Percentage)
-
-Sampledf$Candidate <- factor(Sampledf$Candidate, levels = c("Biden", "Trump", "Other"))
-
-ggplot(data=Sampledf,aes(x=Candidate, y=Percentage)) +
-  geom_bar(mapping=aes(x=Candidate, y=Percentage), stat = "identity", fill="lightblue") + 
-  geom_text(aes(label=paste(Percentage, "%")), vjust=1.6, color="white", size=3.5)
-```
-
-
-### A Fifth Sample of 702 Voters
-
-<div style="float: left; width: 60%;">
-
-Let's simulate taking another fourth random sample of 702 voters. 
-
-```{r}
-Sample <- sample_n(Population, 702, replace=FALSE)
-```
-
-Population Summary:
-
-```{r}
-summary(Population$Vote)
-```
-
-Results in random sample of 702 voters: 
-
-```{r}
-summary(Sample$Vote)
-```
-
-</div>
-
-<div style="float: right; width: 40%;">
-```{r, echo=FALSE, fig.height=6, fig.width=3}
-Candidate <- c("Biden", "Other", "Trump")
-Percentage <- round(summary(Sample$Vote)/length(Sample$Vote)*100,1)
-Sampledf <- data.frame(Candidate, Percentage)
-
-Sampledf$Candidate <- factor(Sampledf$Candidate, levels = c("Biden", "Trump", "Other"))
-
-ggplot(data=Sampledf,aes(x=Candidate, y=Percentage)) +
-  geom_bar(mapping=aes(x=Candidate, y=Percentage), stat = "identity", fill="lightblue") + 
-  geom_text(aes(label=paste(Percentage, "%")), vjust=1.6, color="white", size=3.5)
-```
-
-
-
-
-### Simulating Many Polls
-
-Let's simulate 10,000 different polls of 702 voters and look at how much variability we see in the difference in proportions supporting each candidate.  
-
-```{r}
-set.seed(09132020)
-```
-
-```{r}
-Biden <- rep(NA, 10000) #blank vector to store proportion supporting Biden
-Trump <- rep(NA, 10000) #blank vector to store proportion supporting Trump
-Other <- rep(NA, 10000) #blank vector to store proportion supporting Other
-
-for (i in 1:10000){
-Sample <- sample_n(Population, 702, replace=FALSE)  #sample 1000 voters
-Biden[i] <- sum(Sample == "Biden")/702   ## record number of Biden votes
-Trump[i] <- sum(Sample == "Trump")/702   ## record number of Trump votes
-Other[i] <- sum(Sample == "Other")/702   ## record number of Other votes
-}
-
-Sim <- 1:10000
-PollingSim <- data.frame(Sim, Biden, Trump, Other)
-PollingSim$PropDiff <- PollingSim$Biden-PollingSim$Trump
-```
-
-
-### Histogram of Difference in Sample Proportions
-
-The histogram shows the difference in proportion favoring each party's candidate in the 10,000 samples.
-
-Recall that the samples were taken under the assumption that there is no difference in support between the Republican or Democrat in the population.  
-
-```{r, fig.height=2, fig.width=7}
-Vote_Samp_Dist <- ggplot(data=PollingSim, aes(x=PropDiff)) +  geom_histogram(fill="blue", color="white", binwidth=0.001) + 
-  xlab(" Dem. Prop. - Rep. Prop") + ylab("Frequency") + 
-  ggtitle("Sampling Distribution for Difference in Proportions")
-Vote_Samp_Dist 
-```
-
-This distribution is called the **sampling distribution** for the difference in proportions. 
-
-### Sampling Dist. for Diff. in Proportions
-
-```{r, fig.height=2, fig.width=7, echo=FALSE}
-Vote_Samp_Dist 
-```
-
-```{r}
-mean(PollingSim$PropDiff)
-```
-
-```{r}
-SE <- sd(PollingSim$PropDiff)
-SE
-```
-
-The sampling distribution for the difference in candidate support is approximately centered at 0, as we would expect. The standard deviation in difference between candidates is about 3.7 percentage points.   
-
-
-### Difference in Sample Proportions (cont.)
-
-
-```{r, echo=FALSE, fig.height=2.5, fig.width=7}
-q.025 <- quantile(PollingSim$PropDiff, .025)
-q.975 <- quantile(PollingSim$PropDiff, .975)
-ggplot(data=PollingSim, aes(x=PropDiff, fill=!(PropDiff>=q.975 | PropDiff<= q.025)))+ xlim(c(-.1, .1)) +  geom_histogram(color="white", boundary = -0.1,boundary = 0.1, binwidth=0.001) + 
-  xlab(" Dem. Prop. - Rep. Prop") + ylab("Frequency") +
-  ggtitle("Difference in Sample Proportions, assuming Population Proportions are Equal") +     geom_vline(xintercept=c(q.025,q.975), color="red") + 
-  annotate("text", label="2.5% of Polls", x= -0.10, y=170) + 
-  annotate("text", label="95% of Polls", x= 0, y=170) +
-  annotate("text", label="2.5% of Polls", x= 0.09, y=170)+ theme(legend.position = "none")
-```
-
-```{r}
-c(quantile(PollingSim$PropDiff, .025), quantile(PollingSim$PropDiff, .975))
-```
-
-* Approximately 95% of the polls were within $\pm 7$ of the actual difference, which in this case was assumed to be 0.
-
-### Conclusions from Election Polling Simulation
-
-Since Biden is ahead by 4 percentage points in the Washington Post survey of 702  voters, it is plausible that he could really be ahead by as many as about 11 percentage points, or behind by as many as about 3. 
-
-* The $\pm .07$ is called a **margin of error**, and the resulting range of plausible values is called a **confidence interval** for the difference in proportions.    
-
-* A confidence interval gives a reasonable range for a value pertaining to the entire population, using information from a sample.  
-
-
-### What does "95% Confidence" Mean?
-
-95% confidence means that if we were to repeat our procedure on many, random samples, then in the long run, 95% of them would contain the true difference in proportions supporting the candidates. 
-
-```{r, echo=FALSE}
-PollingSim <- PollingSim %>% mutate(Lower = PropDiff - 0.07, 
-                                    Upper = PropDiff + 0.07,
-                                    Contains0 = Lower < 0 & Upper > 0 )
-```
-
-
-```{r, echo=FALSE, fig.height=4, fig.width=7}
-ggplot(data=PollingSim[1:100,], aes(xmin = Lower, xmax = Upper, y = Sim, color=Contains0))+
-  geom_linerange(lwd=1) + 
-  geom_point(aes(x=PropDiff, y=Sim)) + 
-  labs(x="Dem. Prop - Rep. Prop", title='95% Confidence Intervals') + theme_bw() + 
-  geom_vline(xintercept=0)
-```
-
-Here, we see results for 100 random samples. Notice that when we do $\text{Prop. Diff} \pm 0.07$, approximately 95% lead to a confidence interval containing 0 (the assumed true difference).  
-
-
-
-## Bootstrap Sampling for Election Example
-
-### A More Realistic Scenario
-
-* The prior simulation is based on the unrealistic assumption that we know the proportion of voters in the entire population favoring each candidate. 
-
-* If we really know this, there would be no need to take polls.    
-
-* In reality, we will only have the result of a single sample, and from that, we will need to determine how much our result might vary from the overall population parameter.  
-
-### Example: Election Polling Survey
-
-Recall the Washington Post Poll of 702 Wisconsin voters that showed 50% supporting Biden, and 46% supporting Trump. 
-
-Although the poll does not release exact counts, we can infer that 351 voters picked Biden, 323 picked Trump, and 28 picked someone else. 
-
-Without assuming anything about the larger population, how can we account for sampling variability to obtain a reasonable range for the true difference in proportion of voters supporting the candidates?
-
-
-### Illustration of the Bootstrap "Idea"
-
-Bootstrap sampling is a popular modern approach for measuring sampling variability. 
-
-The idea is to mimic sampling from a population, by copying the sample many times, and then sampling from these copies. 
+In a fun-sized pack of M&M's we observe the following colors:
 
 ```{r, echo=FALSE, out.width = '50%'}
-knitr::include_graphics("Bootstrap_Idea.png")
+knitr::include_graphics("Candies.jpg")
 ```
 
-We then calculate the statistic of interest (i.e. difference in proportions) in each bootstrap sample to get a sense of the amount of variability between samples.  
+Using our sample, we estimate that the proportion of blues is $\hat{p}=\frac{6}{14}\approx 0.429$.   
 
-### The Bootstrap "Idea"
+### Estimating Sampling Variability
 
-1. Create many (theoretically infinitely many) copies of the original sample.   
+Of course, each sample would be different, so we shouldn't expect the proportion of blue's among all M&M's to exactly match the proportion in our sample. Instead, we can use our sample estimate ($\hat{p}$) to get a reasonable range for where the population parameter $p$ could lie.   
 
-2. Take a sample of the same size as our original sample. This is known as a **bootstrap sample.** Since we have created many copies of the original sample some cases will come up multiple times and others not at all in our bootstrap sample. 
+We need to know how much the proportion of blues could vary from one sample to the next. (The more variability, the wider our interval will need to be).   
 
-3. Calculate the difference in proportions supporting each candidate in the bootstrap sample.    
+### Estimating Sampling Variability 
 
-4. Repeat steps 2 and 3 many (say 10,000) times, keeping track of the differences in proportions supporting each candidate. 
+In order to estimate how much sample-to-sample variability is associated with $\hat{p}$, we'll follow these steps:
 
-5. Look at the distribution of differences calculated from the bootstrap samples. The  variability in this distribution can be used to approximate the variability in the sampling distribution for the difference in proportions. 
+1. Start with the sample of 14 "M&M's".   
+2. Randomly draw a single "M&M" and record the color. Put the "M&M" back in the bag.    
+3. Draw another "M&M". Again record the color and put it back.   
+4. Repeat steps 2-3 12 more times to create a sample of size 14   
+5. Record the proportion of blue M&M's in your sample of 14 in the spreadsheet, next to your name, and sample 1.    
+6. Repeat steps 1-5 2 more times, and record the proportion of blue's next to your name, and samples 2 and 3.   
 
 
-### Bootstrap via Resampling Illustration
+### Reading In Our Results
 
-Copying the original sample infinitely many times, and then sampling from these copies is equivalent to simply sampling from the original sample, using replacement. This is how bootstrap sampling is done in practice.   
-
-```{r, echo=FALSE, out.width = '70%'}
-knitr::include_graphics("Bootstrap.png")
+```{r, echo=FALSE}
+Class_Bootstrap_Results <- data.frame(rbinom(75, 14, 3/7))
+names(Class_Bootstrap_Results) <- "Proportion_Blue"
 ```
 
-
-### Bootstrap Sampling with Replacement
-
-In practice, the bootstrap is performed by resampling from the original data, with replacement.   
-
-**Procedure:** 
-
-1. Take a sample of the same size as our original sample, by sampling cases from the original sample, with replacement. Since are sampling with replacement, some cases will come up multiple times and others not at all in our bootstrap sample. 
-
-2. Calculate the difference in proportions supporting each candidate in the bootstrap sample.    
-
-3. Repeat steps 2 and 3 many (say 10,000) times, keeping track of the differences in proportions supporting each candidate. 
-
-4. Look at the distribution of differences calculated from the bootstrap samples. The variability in this distribution can be used to approximate the variability in the sampling distribution for the difference in proportions. 
-
-
-### Code for Bootstrapping for Difference In Proportions
 
 ```{r}
-Vote <- c(rep("Biden", 351), rep("Trump", 323), rep("Other", 28))
-Sample <- data.frame(Vote)
-
-Difference <- rep(NA, 10000)
-for (i in 1:10000){
-BootstrapSample <- sample_n(Sample, 702, replace=TRUE) 
-Difference[i] <- (sum(BootstrapSample$Vote=="Biden") - sum(BootstrapSample$Vote=="Trump"))/702
-}
-Vote_BootstrapResults <- data.frame(Difference)
+head(Class_Bootstrap_Results)
 ```
 
-### Bootstrap Dist. for Diff. in Proportion
-
-```{r,  echo=FALSE, fig.height=2.5}
-BootstrapDiff_Dist <- ggplot(data=Vote_BootstrapResults, aes(x=Difference)) + geom_histogram(fill="lightblue", color="white") + 
-  ggtitle("Bootstrap Distribution for Difference in Proportion") + 
-  xlab("Proportion Democratic - Proportion Republican") + ylab("Frequency") 
-BootstrapDiff_Dist + geom_vline(xintercept=0.04)
-```
-
-* Note that the bootstrap distibution is centered at approximately 0.04, which was the observed difference we saw in our sample. 
-
-* Individual sample differences seem to deviate by up to about $\pm 0.07$. 
-
-**Bootstrap standard error:**
+### Distribution of Proportion Blue in Simulations 
 
 ```{r}
-sd(Vote_BootstrapResults$Difference)
+ggplot(data=Class_Bootstrap_Results, aes(x=Proportion_Blue)) + 
+  geom_histogram(fill="blue", color="white")
 ```
 
-### Bootstrap Percentile Confidence Interval
 
-An approximate 95% percentile confidence interval for the difference in support is found by finding the 0.025 and 0.975 quantiles of the bootstrap distribution, since 95% of all bootstrap samples produce statistics between these values. 
+### Percentile Confidence Interval  {.smaller}
 
-```{r}
-q.025 <- quantile(Vote_BootstrapResults$Difference, 0.025)
-q.975 <- quantile(Vote_BootstrapResults$Difference, 0.975)
+```{r, echo=FALSE}
+q.025 <- quantile(Class_Bootstrap_Results$Proportion_Blue, 0.025)
+q.975 <- quantile(Class_Bootstrap_Results$Proportion_Blue, 0.975)
+```
+
+```{r, fig.height=3, fig.width=10, echo=FALSE}
+ggplot(data=Class_Bootstrap_Results, aes(x=Proportion_Blue)) + 
+  geom_histogram(fill="blue", color="white") + 
+  geom_vline(xintercept=c(q.025, q.975), color="red") + 
+  annotate("text", label="2.5% of Simulations", x= 0, y=30) + 
+  annotate("text", label="95% of Simulations", x= 0.4, y=30) +
+  annotate("text", label="2.5% of Simulations", x= 0.8, y=30)+ theme(legend.position = "none")
 ```
 
 ```{r}
 c(q.025, q.975)
 ```
 
-We can be 95% confident that Biden is between `r round(q.975*100, 1)` percentage points ahead, and `r -1*round(q.025*100, 1)` percentage points behind.   
+Based on our simulation, we are 95% confident that the proportion of blues among all M&M's is between `r q.025` and `r q.975`. 
 
+### Simulation Using R
 
-### 95% Bootstrap Percentile Confidence Interval Visually
-
-```{r, echo=FALSE}
-ggplot(data=Vote_BootstrapResults, aes(x=Difference)) +  
-  geom_histogram(color="white", fill="lightblue", boundary = -0.1,boundary = 0.1, binwidth=0.01) + 
-  xlab(" Biden Prop. - Trump Prop") + ylab("Frequency") +
-  ggtitle("Bootstrap Distribution for Difference in Proportion") +   
-  geom_vline(xintercept=c(q.025,q.975), color="red") + 
-  annotate("text", label=".025 of Area", x= -0.05, y=200) + 
-  annotate("text", label=".95 of Area", x= 0.04, y=200) +
-  annotate("text", label=".025 of Area", x= 0.13, y=200)
-```
-
-We can be 95% confident that Biden is between `r round(q.975*100, 1)` percentage points ahead, and `r -1*round(q.025*100, 1)` percentage points behind.   
-
-
-### Bootstrap Standard Error
-
-The **bootstrap standard error** is the standard deviation of the bootstrap distribution. It measures the amount of variability in a statistic (in this cases difference in proportions) between samples of the given size. 
+Although our results give us some sense of how much the proportion of blues could vary from one sample to the next, it would be better if we had LOTS of samples. We'll use R to simulate doing this 10,000 times. 
 
 ```{r}
-sd(Vote_BootstrapResults$Difference)
+Color <- c(rep("Blue", 6), rep("Orange", 3), rep("Green", 2), rep("Yellow", 2), 
+           rep("Red", 1))
+Sample <- data.frame(Color)
+
+BootstrapSample <- sample_n(Sample, 14, replace=TRUE) 
+t(BootstrapSample)
 ```
 
-If large number of polls of 702 voters were taken, the standard deviation in the distribution of the difference in support between Biden and Trump is estimated to be `r sd(Vote_BootstrapResults$Difference)`
+### Simulating Many Samples in R
+
+```{r}
+Proportion_Blue <- rep(NA, 10000)
+for (i in 1:10000){
+BootstrapSample <- sample_n(Sample, 14, replace=TRUE) 
+Proportion_Blue[i] <- sum(BootstrapSample$Color=="Blue")/14
+}
+Candy_Bootstrap_Results <- data.frame(Proportion_Blue)
+```
+
+### Bootstrap Results
+
+Proportion of blues in first 6 samples
+
+```{r}
+head(Candy_Bootstrap_Results)
+```
+
+## Bootstrap Confidence Intervals
 
 
-### Standard Error Confidence Intervals
+### Bootstrap Distribution from R Simulation {.smaller}
 
-* Standard error is the standard deviation of the distribution of a statistic, across many samples of the given size. 
+```{r, echo=FALSE}
+q.025 <- quantile(Candy_Bootstrap_Results$Proportion_Blue, 0.025)
+q.975 <- quantile(Candy_Bootstrap_Results$Proportion_Blue, 0.975)
+```
 
-* When the sampling distribution of a statistic is symmetric and bell-shaped, then an approximately 95% of all samples will lead to a statistic that is within 2 standard errors of the desired population quantity. 
+```{r, fig.height=2.5, fig.width=10, echo=FALSE}
+Boot_Dist_Plot <- ggplot(data=Candy_Bootstrap_Results, aes(x=Proportion_Blue)) + geom_histogram(fill="blue", color="white") + 
+  annotate("text", label="2.5% of Simulations", x= 0.1, y=1000) + 
+  annotate("text", label="95% of Simulations", x= 0.4, y=1000) +
+  annotate("text", label="2.5% of Simulations", x= 0.8, y=1000)+ theme(legend.position = "none")
 
-* An approximate 95% bootstrap standard error formula is given by:
+Boot_Dist_Plot + geom_vline(xintercept=c(q.025, q.975), color="red")
+```
+
+
+```{r}
+c(q.025, q.975)
+```
+
+Based on our simulation, we are 95% confident that the proportion of blues among all M&M's is between `r q.025` and `r q.975`. 
+
+We call this a **percentile bootstrap confidence interval**.   
+
+### Standard Error 
+
+The **bootstrap standard error** is the standard deviation of the bootstrap distribution. It measures the amount of variability in a statistic (in this cases difference in proportions) between samples of the given size.
+
+```{r}
+SE <- sd(Candy_Bootstrap_Results$Proportion_Blue)
+SE
+```
+
+Based on our simulation, we estimate that the standard error in proportion of blues in a sample of 14 is  `r sd(Candy_Bootstrap_Results$Proportion_Blue)`
+
+### Bootstrap Standard Error Confidence Intervals
+
+
+* When the sampling distribution of a statistic is symmetric and bell-shaped, approximately 95% of all samples will lead to a statistic that is within 2 standard errors of the desired population quantity. 
+
+95% bootstrap standard error confidence interval:
 
 \[
 \text{Statistic} \pm 2\times\text{Standard Error}
@@ -2609,16 +2245,20 @@ If large number of polls of 702 voters were taken, the standard deviation in the
 
 * it is only appropriate to use the bootstrap standard error confidence interval method when a sampling distribution is symmetric and bell-shaped
 
-### Bootstrap Standard Error Confidence Interval
+### Calculating Standard Error Confidence Interval {.smaller}
 
 ```{r}
-SE <- sd(Vote_BootstrapResults$Difference)
-c(0.04 - 2*SE, 0.04 + 2*SE)
+Estimate <- 6/14
+c(Estimate - 2*SE, Estimate + 2*SE)
 ```
 
-We can be 95% confident that Biden is between `r round(100*(0.04 + 2*SE), 1)` percentage points ahead, and `r -round(100*(0.04 - 2*SE), 1)` percentage points behind.   
+We add the cutoff points for the standard error confidence interval
 
-The bootstrap percentile confidence interval and bootstrap standard error confidence intervals largely agree, which we expect to happen when the bootstrap distribution is symmetric and bell-shaped. 
+```{r, fig.height=2.5, fig.width=10, echo=FALSE}
+Boot_Dist_Plot + geom_vline(xintercept = c(Estimate - 2*SE, Estimate + 2*SE), color="red")
+```
+
+Based on our simulation, we are 95% confident that the proportion of blues among all M&M's is between `r Estimate - 2*SE` and `r Estimate + 2*SE`. 
 
 ### Comparison of Bootstrap Confidence Intervals
 
@@ -2631,51 +2271,107 @@ The bootstrap percentile confidence interval and bootstrap standard error confid
 
 When the bootstrap distribution is symmetric and bell-shaped, these intervals will be approximately the same.   
 
+* The $\pm$ $2\times\text{SE}$ is called a **margin of error**, and the resulting range of plausible values for the population parameter $p$ is called a **confidence interval**.    
 
-### 90% Bootstrap Percentile Confidence Interval
+* A confidence interval gives a reasonable range for a value pertaining to the entire population, using information from a sample. 
 
-```{r}
-q.05 <- quantile(Vote_BootstrapResults$Difference, 0.05)
-q.95 <- quantile(Vote_BootstrapResults$Difference, 0.95)
+### 90% Bootstrap Percentile Confidence Interval {.smaller}
+
+```{r, echo=TRUE}
+q.05 <- quantile(Candy_Bootstrap_Results$Proportion_Blue, 0.05)
+q.95 <- quantile(Candy_Bootstrap_Results$Proportion_Blue, 0.95)
 ```
+
+
+```{r, fig.height=2.5, fig.width=10, echo=FALSE}
+Boot_Dist_Plot <- ggplot(data=Candy_Bootstrap_Results, aes(x=Proportion_Blue)) + geom_histogram(fill="blue", color="white") 
+
+Boot_Dist_Plot + geom_vline(xintercept=c(q.05, q.95), color="red") + 
+  annotate("text", label="5% of Simulations", x= 0.1, y=1000) + 
+  annotate("text", label="90% of Simulations", x= 0.4, y=1000) +
+  annotate("text", label="5% of Simulations", x= 0.8, y=1000)+ theme(legend.position = "none")
+```
+
 
 ```{r}
 c(q.05, q.95)
 ```
 
-We can be 90% confident that Biden is between 10 percentage points ahead, and 2 percentage points behind.   
+Based on our simulation, we are 90% confident that the proportion of blues among all M&M's is between `r q.05` and `r q.95`. 
 
 
-### 90% Bootstrap Confidence Interval Visually
 
-```{r, echo=FALSE}
-ggplot(data=Vote_BootstrapResults, aes(x=Difference)) + 
-  geom_histogram(color="white", boundary = -0.1,boundary = 0.1, binwidth=0.01, fill="lightblue") + 
-  xlab(" Biden Prop. - Trump Prop") + ylab("Frequency") +
-  ggtitle("Difference in Sample Proportions, assuming Population Proportions are Equal") +  
-  geom_vline(xintercept=c(q.05,q.95), color="red") + 
-  annotate("text", label=".05 of Area", x= -0.05, y=200) + 
-  annotate("text", label=".90 of Area", x= 0.04, y=200) +
-  annotate("text", label=".05 of Area", x= 0.125, y=200) + theme(legend.position = "none")
+
+
+### Impact of Sample Size
+
+Suppose, hypothetically, that instead of a sample of 14, we had a sample of 140, with the same proportions for each color.
+
+```{r}
+Color <- c(rep("Blue", 60), rep("Orange", 30), rep("Green", 20), rep("Yellow", 20), 
+           rep("Red", 10))
+Sample <- data.frame(Color)
+
+Proportion_Blue <- rep(NA, 10000)
+for (i in 1:10000){
+BootstrapSample <- sample_n(Sample, 140, replace=TRUE) 
+Proportion_Blue[i] <- sum(BootstrapSample$Color=="Blue")/140
+}
+Candy_Bootstrap_Results <- data.frame(Proportion_Blue)
 ```
 
-We can be 90% confident that Biden is between 10 percentage points ahead, and 2 percentage points behind.   
+### Bootstrap CI for $n=140$
 
 
+```{r, echo=FALSE}
+q.025 <- quantile(Candy_Bootstrap_Results$Proportion_Blue, 0.025)
+q.975 <- quantile(Candy_Bootstrap_Results$Proportion_Blue, 0.975)
+```
 
-### Comments on Election Polling
+```{r, fig.height=2.5, fig.width=10, echo=FALSE}
+Boot_Dist_Plot <- ggplot(data=Candy_Bootstrap_Results, aes(x=Proportion_Blue)) + geom_histogram(fill="blue", color="white") + 
+  annotate("text", label="2.5% of Simulations", x= 0.3, y=1000) + 
+  annotate("text", label="95% of Simulations", x= 0.41, y=1000) +
+  annotate("text", label="2.5% of Simulations", x= 0.55, y=1000)+ theme(legend.position = "none")
 
-* In reality, it is very hard to obtain a "random" sample of voters. Voters can be hard to reach, and many people do not respond to polls. Often it is people with the strongest opinions who do. Furthermore, some demographic groups are harder to contact than others, and these groups are likely to be underrepresented in surveys.    
+Boot_Dist_Plot + geom_vline(xintercept=c(q.025, q.975), color="red")
+```
 
-* In order to account for sampling challenges, pollsters tend to weight responses so that their proportions match those of registered voters. For example, if fewer college students respond to the survey, then those that do are weighted more heavily to make up for it.    
 
-* Weighting helps offset underrepresentation, but creates additional challenges. It is not always clear what weights to use. This is especially tricky for election polling, since the demographic breakdown of voters who turn out differs from election to election. 
+```{r}
+c(q.025, q.975)
+```
 
-* Because of these challenges, polling involves a "practical" margin of error, in addition to the "mathematical" margin of error. 
+Based on our simulation, we are 95% confident that the proportion of blues among all M&M's is between `r q.025` and `r q.975`. 
 
-* Political analysts such as those at [fivethirtyeight.com] (https://fivethirtyeight.com/), average results from many different polls to effectively obtain larger samples. This reduces the "mathematical" margin of error, but the "practical" margin of error remains.     
 
-* Historically, election polling in the United States has been fairly accurate (usually within $\pm 5$ percentage points of the polling average) in major national or statwide elections. Polling has proven more challenging and sometimes resulted in larger errors in the UK and other countries.   
+### What does "95% Confidence" Mean? {.smaller}
+
+95% confidence means that if we were to repeat our procedure on many, random samples, then in the long run, 95% of them would contain the true population parameter.  
+
+Suppose that in reality 25% of all M&M's were blue. We simulate 100 different samples of 14 M&M's and calculate confidence intervals for the percentage of blue's, based on each sample. Intervals are colored according to whether or not the contain the true (typically unknown) parameter value $p=0.25$
+
+```{r, echo=FALSE}
+set.seed(09132021)
+Sample <- rbinom(100, 14, 0.25)  
+Lower = Sample/14 - 1.96*sqrt(.25*.74/14) 
+Upper = Sample/14 + 1.96*sqrt(.25*.74/14)
+Contains0.25 = (Lower < 0.25) & (Upper > 0.25) 
+CISim <- data.frame(Lower, Upper, Contains0.25)
+Sim <- 1:100
+```
+
+
+```{r, echo=FALSE, fig.height=3, fig.width=7}
+ggplot(data=CISim, aes(xmin = Lower, xmax = Upper, y = Sim, color=Contains0.25))+
+  geom_linerange(lwd=1) + 
+  geom_point(aes(x=Sample/14, y=Sim)) + 
+  labs(x="Proportion of Blues", title='95% Confidence Intervals') + theme_bw() + 
+  geom_vline(xintercept=0.25)
+```
+
+`r sum(Contains0.25)` of the samples result in intervals that contain the true proportion $p=0.25$.    
+
 
 
 ## Bootstrapping Distribution of Sample Mean
@@ -3529,7 +3225,7 @@ c(Slope-2*SE, Slope+2*SE)
 Cars_Acc060_B_Slope_Plot  + geom_vline(xintercept=c(Slope-2*SE, Slope+2*SE), color="red") 
 ```
 
-We are 95% confident that the standard deviation in mercury level is all Florida Lakes is between `r round(Slope-2*SE,2)` and `r round(Slope+2*SE,2)` ppm.  
+We are 95% confident that the the average price of a new 2015 car decreases between `r round(Slope-2*SE,2)` and `r round(Slope+2*SE,2)` thousand dollars for each additional second it takes to accelerate from 0 to 60 mph.    
 
 
 
@@ -3573,7 +3269,7 @@ c(Int-2*SE, Int+2*SE)
 Cars_Acc060_B_Intercept_Plot  + geom_vline(xintercept=c(Int-2*SE, Int+2*SE), color="red") 
 ```
 
-We are 95% confident that the standard deviation in mercury level is all Florida Lakes is between `r round(Int-2*SE,2)` and `r round(Int+2*SE,2)` ppm.  
+We are 95% confident that the intercept for the regression line relating price to acceleration time is between`r round(Int-2*SE,2)` and `r round(Int+2*SE,2)` thousand dollars. This intercept does not have a meaningful interpretation in context. 
 
 ## Bootstrap Distribution for Multiple Regression Coefficients
 
@@ -3790,7 +3486,7 @@ ggplot(data=Bears_Bootstrap_Results, aes(x=(b0+b2)+24*(b1+b3))) +
 
 We are 95% confident that the mean weight of all 24 month old female bears is between `r q.025` and `r q.975` pounds.  
 
-<!---
+
 
 # Simulation-Based Hypothesis Tests
 
@@ -5344,35 +5040,59 @@ summary(M_Birthwt_Full)
 * Were treatments randomly assigned (for experiments)?    
 * Are there other variables to consider?
 
+
+
+
 # The Normal Error Linear Regression Model
 
-## Standard Error Formulas and Theory-Based Intervals
+## Theory-Based Standard Error Formulas   
 
-### Standard Error for the Mean
+### Why Did We Use Simulation
 
-* Standard error is the standard deviation of the distribution of a statistic, across many samples of the given size. This is different than the sample standard deviation, which pertains to the amount of variability between individuals in the sample. 
+We've used simulation (bootstrapping and simulation-based hypothesis tests) to do two different things.    
+
+1. To determine how much a sample statistic might vary from one sample to the next.     
+2. To approximate the distribution of a statistic under the assumption that the null hypothesis is true.    
+
+In some common situations, it is possible to use mathematical theory to calculate standard errors, without relying on simulation.  
+
+### Theory-Based Standard Error Formulas  
+
+Recall that standard error tells us about the variability in the distribution of a statistic between different samples size $n$.   
+
+In special cases, there are mathematical formulas for standard errors associated regression coefficients.   
+
+|Scenario| Standard Error | 
+|---------|-----|     
+| One Sample Mean | $SE(\bar{x})=\frac{s}{\sqrt{n}}$ |   
+| Difference in Sample Means | $SE(\bar{x}_1-\bar{x}_2)=s\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}$ |    
+| Intercept in Simple Linear Regression | $SE(b_0)=s\sqrt{\frac{1}{n}+\frac{\bar{x}^2}{\sum(x_i-\bar{x})^2}}$ |    
+| Slope in Simple Linear Regression | $SE(b_1)=\sqrt{\frac{s^2}{\sum(x_i-\bar{x})^2}}$ | 
 
 
-<div style="float: left; width: 50%;">
+* $s=\sqrt{\frac{\displaystyle\sum_{i=1}^n(y_i-\hat{y}_i)^2}{(n-(p+1))}}$, (p is number of regression coefficients not including $b_0$) is sample standard deviation     
 
-```{r, fig.height=2, echo=FALSE, fig.width=4}
-Lakes_Hist
+* In the 2nd formula, the standard error estimate $s\sqrt{\frac{1}{n_1+n_2}}$ is called a "pooled" estimate since it combines information from all groups. When there is reason to believe standard deviation differs between groups, we often use an "unpooled" standard error estimate of $\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}$, where $s_1, s_2$ represents the standard deviation for groups 1 and 2. 
+
+### One-Sample Mean Example
+
+Standard Error of the mean, for sample of 53 lakes.
+
+$SE(\bar{x})=\frac{s}{\sqrt{n}}$
+
+```{r}
+sd(FloridaLakes$AvgMercury)/sqrt(53)
 ```
 
-Standard Deviation:
 
-```{r, fig.height=2}
-sd(FloridaLakes$AvgMercury)
+```{r}
+summary(lm(data=FloridaLakes, AvgMercury~1))
 ```
 
-The standard deviation in mercury levels between individual lakes is 0.341 ppm. 
+Comparison to Bootstrap:    
 
-</div>
-
-<div style="float: left; width: 50%;">
-
-```{r, fig.height=2, echo=FALSE, fig.width=4}
-Lakes_Bootstrap_Mean + xlim(c(0,1.5))
+```{r, fig.height=2, echo=FALSE, fig.width=7}
+Lakes_Bootstrap_Mean
 ```
 
 Standard Error for Mean: 
@@ -5381,73 +5101,45 @@ Standard Error for Mean:
 SE <- sd(Lakes_Bootstrap_Results_Mean$MeanHg); SE
 ```
 
-The standard deviation in the distribution for mean mercury levels between different samples of 53 lakes is approximately `r SE` ppm. 
-
-### Standard Error for the Mean (continued)
-
-When the statistic is the sample mean $\bar{x}$, the standard error is given by:
-
-\[
-SE(\bar{x})=\frac{s}{\sqrt{n}}, 
-\]
-
-where $s=\sqrt{\frac{\displaystyle\sum_{i=1}^n(y_i-\hat{y}_i)^2}{(n-1)}}$ represents the sample standard deviation and $n$ represents the sample size.   
-
-```{r}
-sd(FloridaLakes$AvgMercury)/sqrt(53)
-```
-
-This is an approximation of the standard deviation in the distribution of sample means for samples of size 53.  
-
-### Standard Error in R Output for Lakes
-
-```{r}
-summary(lm(data=FloridaLakes, AvgMercury~1))
-```
-
-
-
-### Standard Error for Difference in Means
-
-```{r, fig.height=2, echo=FALSE, fig.width=7}
-NS_Lakes_Bootstrap_Plot_b1
-```
-
-Standard Error for Mean: 
-
-```{r}
-SE <- sd(NS_Lakes_Bootstrap_Results$b1); SE
-```
 
 ### Standard Error for Difference in Means (cont.)
 
-When the statistic is the sample mean $\bar{x}_1-\bar{x}_2$, the standard error is given by:
+Standard Error for difference of means between 33 lakes in North Florida, and 20 lakes in South Florida
 
 \[
-SE(\bar{x})=s\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}, 
+SE(\bar{x}_1-\bar{x}_2)=s\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}, 
 \]
 
-where $s=\sqrt{\frac{\displaystyle\sum_{i=1}^n(y_i-\hat{y}_i)^2}{(n-2)}}$ represents the sample standard deviation and $n$ represents the sample size. 
 
+```{r}
+s <- sqrt(sum(Lakes_M$residuals^2)/(53-2))
+SE <- s*sqrt(1/20+1/33); SE
+```
 
-* The standard error estimate $s\sqrt{\frac{1}{n_1+n_2}}$ is called a "pooled" estimate since it combines information from all groups to estimate $\sigma$. When there is reason to believe standard deviation differs between groups, an "unpooled" standard error estimate of $\sqrt{\frac{s_1^2}{n_0}+\frac{s_2^2}{n_2}}$, where $s_g$ represents the standard deviation for group $g$
-
-
-### Standard Error in R Output for Lakes Difference 
 
 ```{r}
 summary(Lakes_M)
 ```
 
+Comparison to Bootstrap:    
+
+```{r}
+NS_Lakes_Bootstrap_Plot_b1 <- ggplot(data=NS_Lakes_Bootstrap_Results, aes(x=b1)) +  
+  geom_histogram(color="white", fill="lightblue") + 
+  xlab("b1 in Bootstrap Sample") + ylab("Frequency") +
+  ggtitle("Northern vs Southern Lakes: Bootstrap Distribution for b1") 
+NS_Lakes_Bootstrap_Plot_b1 
+```
+
+```{r}
+sd(NS_Lakes_Bootstrap_Results$b1)
+```
 
 
 ### Standard Error for Slope and Intercept in SLR
 
-Standard Error for Slope of Regression Line: 
+Standard Errors pertaining to the variability in slope and intercept of regression line relating price and acceleration time in samples of 110 cars.  
 
-\[
-SE(b_1)=\sqrt{\frac{s^2}{\sum(x_i-\bar{x})^2}} 
-\]
 
 Standard Error for Intercept of Regression Line: 
 
@@ -5455,17 +5147,22 @@ Standard Error for Intercept of Regression Line:
 SE(b_0)=s\sqrt{\frac{1}{n}+\frac{\bar{x}^2}{\sum(x_i-\bar{x})^2}}
 \]
 
-where $s=\sqrt{\frac{\displaystyle\sum_{i=1}^n(y_i-\hat{y}_i)^2}{(n-2)}}$ represents the sample standard deviation and $n$ represents the sample size. 
+Standard Error for Slope of Regression Line: 
 
-These standard errors pertain to the variability in slope and intercept of regression line between samples of 110 cars.  
-
-### Standard Error for Slope and Intercept in SLR (cont.)
+\[
+SE(b_1)=\sqrt{\frac{s^2}{\sum(x_i-\bar{x})^2}} 
+\]
 
 ```{r}
 s <- summary(Cars_M_A060)$sigma
 xbar <- mean(Cars2015$Acc060)
 SSx <- sum((Cars2015$Acc060-xbar)^2)
+```
 
+SE for Intercept
+
+```{r}
+s*sqrt(1/110 + xbar^2/SSx)
 ```
 
 SE for Slope:
@@ -5475,19 +5172,13 @@ sqrt(s^2/SSx)
 ```
 
 ```{r}
-s*sqrt(1/110 + xbar^2/SSx)
-```
-
-### R Output for Cars Slope
-
-```{r}
 summary(Cars_M_A060)
 ```
+
 
 ### $\text{SE}(b_j)$ in MLR
 
 When there is more than one explanatory variable, estimates of regression coefficients and their standard errors become more complicated, and involves inversion of a "design matrix."
-
 
 This [link](http://users.stat.umn.edu/~helwig/notes/mlr-Notes.pdf) provides additional information on the topic. Understanding it will likely require experience with linear algebra (i.e MATH 250). 
 
@@ -5597,21 +5288,71 @@ Lakes_Bootstrap_Median
 
 
 
-
 ## The Normal Error Regression Model
 
+### Why Did We Use Simulation (Revisited)
 
-### Symmetric, Bell-Shaped Distributions
+We've used simulation (bootstrapping and simulation-based hypothesis tests) to do two different things.    
 
-Notice that when we used simulation to approximate the sampling distributions of statistics, many (but not all) of these turned out to be symmetric and bell-shaped. 
+1. To determine how much a sample statistic might vary from one sample to the next.     
+2. To approximate the distribution of a statistic under the assumption that the null hypothesis is true.    
 
-```{r, fig.width=9, fig.height=3.5, echo=FALSE}
-grid.arrange(Lakes_Bootstrap_Mean, Cars_Acc060_B_Slope_Plot, NSLakes_SimulationResultsPlot, Bears_plot_b1, ncol=2)
+In section 5.1, we talked about a theory-based way to achieve #1, without relying on simulations.    
+
+To achieve #2, we make assumptions about the process from which the data came.   
+
+### Signal and Noise
+
+We assume that there are two components that contribute to our response variable $Y_i$. These are:    
+
+1. A function that relates the expected (or average) value of $Y$ to explanatory variables $X_1, X_2, \ldots{X_p}$. That is, $E(Y_i)= f(X_{i1}, X_{i2}, \ldots, X_{ip})$. This function is often assumed to be linear, that is $E(Y_i)= \beta_0 + \beta_1X_{i1} + \beta_2X_{i2}+ \ldots+ \beta_pX_{ip}$     
+
+2. Random, unexplained, variability that results in an individual response $Y_i$ differing from $E(Y_i)$.   
+
+The first component is often referred to as **signal**. The second is referred to as **noise**. 
+
+### Example: Ice Cream Dispensor
+
+```{r echo=FALSE, out.width = '100%'}
+knitr::include_graphics("Ice_Cream.png")
 ```
+
+Suppose an ice cream machine is manufacturered to dispense 2 oz. of ice cream per second, on average. If each person using the machine got exactly 2 oz. per second, the relationship between time and amount dispensed would look like this:
+
+```{r, echo=FALSE, fig.height=2.5}
+set.seed(10082020)
+time <- c(1, 1.2, 1.5, 1.8, 2.1, 2.1, 2.3, 2.5, 2.6, 2.8, 2.9, 2.9, 3.1, 3.2, 3.6)
+signal <- 2*time
+noise <-rnorm(15, 0, 0.5)
+amount <- 2*time + noise
+Icecream1 <- data.frame(time, amount)
+
+ICplot0 <- ggplot(data=Icecream1, aes(x=time, y=signal)) + geom_point() + ggtitle("Icecream Dispensed without Accounting for Unknown Factors") + xlab("Time Pressing Dispensor") + ylab("Amount Dispensed") + geom_abline(slope=2, intercept=0, color="red") + 
+  annotate("text", label="y=2x", x= 3.5, y=6.5, size=10, color="red")
+ICplot0
+```
+
+
+
+In reality, however, the actual amount dispensed each time it is used will vary due to unknown factors like:  
+
+* force applied to dispensor    
+* temperature    
+* build-up of ice cream   
+* other unknown factors   
+
+Thus, the data will actually look like this:
+
+```{r, echo=FALSE}
+ICplot <- ggplot(data=Icecream1, aes(x=time, y=amount)) + geom_point() + ggtitle("Icecream Dispensed") + xlab("Time Pressing Dispensor") + ylab("Amount Dispensed") 
+ICplot + geom_abline(slope=2, intercept=0, color="red") + 
+  annotate("text", label="y=2x", x= 3.5, y=6.5, size=10, color="red")
+```
+
 
 ### Normal Distribution 
 
-Symmetric and bell-shaped sampling distributions can be approximated with the normal distribution. 
+In a linear regression model, we assume individual response values $Y_i$ deviate from their expectation, according to a **normal distribution**.   
 
 A normal distribution is defined by two parameters:  
       - $\mu$ representing the center of the distribution    
@@ -5650,6 +5391,82 @@ p
 
 Note that for standard deviation $\sigma$, $\sigma^2$ is called the variance. Some books denote the normal distribution as $\mathcal{N}(0, \sigma^2)$, instead of $\mathcal{N}(0,\sigma)$.  
 
+### Signal and Noise in Icecream Example
+
+```{r, fig.height=2.5}
+set.seed(10082020)
+time <- c(1, 1.2, 1.5, 1.8, 2.1, 2.1, 2.3, 2.5, 2.6, 2.8, 2.9, 2.9, 3.1, 3.2, 3.6)
+signal <- 2*time
+noise <-rnorm(15, 0, 0.5)
+amount <- 2*time + noise
+Icecream <- data.frame(time, signal, noise, amount)
+kable(head(Icecream))
+```
+
+### What We Actually Get to See
+
+In reality, we do not see the signal and noise columns, we only see time and amount. From this, we need to estimate signal, without being thrown off by noise.   
+
+```{r, fig.height=4, fig.width = 7, echo=FALSE}
+ggplot(data=Icecream1, aes(x=time, y=amount)) + geom_point() + ggtitle("Icecream Dispensed") + xlab("Time Pressing Dispensor") + ylab("Amount Dispensed")
+```
+
+
+### What We Actually Get to See (cont.)
+
+```{r, fig.height=4, fig.width = 7, echo=FALSE}
+ggplot(data=Icecream1, aes(x=time, y=amount)) + geom_point() + ggtitle("Icecream Dispensed") + xlab("Time Pressing Dispensor") + ylab("Amount Dispensed") + stat_smooth(method="lm", se=FALSE) + geom_abline(slope=2, intercept=0, color="red") + 
+  annotate("text", label="y=2x", x= 3.5, y=6.5, size=10, color="red")
+```
+
+The blue line represents the least squares regression line.    
+
+### IceCream Model From Simulated Data
+
+
+```{r}
+IC_Model <- lm(data=Icecream1, lm(amount~time))
+summary(IC_Model)
+```
+
+
+
+### Mathematical Form of Normal Error Regression Model
+
+The mathematical form of a normal error linear regression model is
+
+$Y_i = \beta_0 + \beta_1X_{i1}+ \ldots + \beta_pX_{ip} + \epsilon_i$, with $\epsilon_i\sim\mathcal{N}(0,\sigma)$. 
+
+Note that in place of $X_{ip}$, we could have indicators for categories, or functions of $X_{ip}$, such as $X_{ip}^2$, $\text{log}(X_{ip})$, or $\text{sin}(X_{ip})$. 
+
+
+### Parameters and Statistics
+
+* We call the quantities $\beta_0, \beta_1, \ldots, \beta_p$ **parameters.** They pertain to the true but unknown data generating mechanism.   
+
+* We call the estimates $b_0, b_1, \ldots, b_p$, **statistics**. They are calculated from our observed data.   
+
+* We use confidence intervals and hypothesis tests make statements about parameters, based on information provided by statistics. 
+
+In reality, data almost never truly come from normal distributions, but the normal distributions are often useful in approximating real data distributions. 
+
+As statistician George Box said, *"All models are wrong, but some are useful."*    
+
+
+## Intervals and Tests in Normal Error Regression Model
+
+
+### Symmetric, Bell-Shaped Distributions
+
+Notice that when we used simulation to approximate the sampling distributions of statistics, many (but not all) of these turned out to be symmetric and bell-shaped. 
+
+```{r, fig.width=9, fig.height=3.5, echo=FALSE}
+grid.arrange(Lakes_Bootstrap_Mean, Cars_Acc060_B_Slope_Plot, NSLakes_SimulationResultsPlot, Bears_plot_b1, ncol=2)
+```
+
+In a normal error regression model, we assume that response $Y_i$ deviates from its expectation,  $E(Y_i) = \beta_0 + \beta_iX_{i1} + \ldots + \beta_p X_{ip}$, according to a normally distributed random error term.  
+
+Whem this assumption is valid we can use symmetric, bell-shaped curves to approximate the sampling distribution of regression coefficients.   
 
 ### t-distribution
 
@@ -5702,282 +5519,8 @@ p
 
 
 
-### Normal Error Regression Model
+### Distribution of $t= \frac{{b_j}-\beta_j}{\text{SE}(b_j)}$
 
-In regression, it is common to assume the following:
-
-1. The expected value of the response variable is a function of one or more explanatory variables. Often, this function is assumed to be linear.     
-
-2. Individual observations vary from their expected value according to a normal distribution.   
-
-The first part is often referred to as *signal* and the second as *noise*. 
-
-This can be written mathematically as:
-
-$Y_i = \beta_0 + \beta_1X_{i1}+ \ldots + \beta_pX_{ip} + \epsilon_i$, with $\epsilon_i\sim\mathcal{N}(0,\sigma)$. 
-
-      
-### Example: Ice Cream Dispensor
-
-<div style="float: left; width: 70%;">
-
-Suppose an ice cream machine is manufacturered to dispense 2 oz. of ice cream per second, on average, but that the actual amount dispensed each time it is used varies due to factors such as
-
-* force applied to dispensor    
-* temperature    
-* build-up of ice cream   
-* other factors   
-
-Suppose that the actual amount dispensed varies from its expectation according to a $\mathcal{N}(0,0.5)$ distribution.   
-
-
-```{r, echo=FALSE, fig.height=2.5}
-set.seed(10082020)
-time <- c(1, 1.2, 1.5, 1.8, 2.1, 2.1, 2.3, 2.5, 2.6, 2.8, 2.9, 2.9, 3.1, 3.2, 3.6)
-amount <- 2*time + rnorm(15, 0, 0.5)
-Icecream1 <- data.frame(time, amount)
-ICplot <- ggplot(data=Icecream1, aes(x=time, y=amount)) + geom_point() + ggtitle("Icecream Dispensed") + xlab("Time Pressing Dispensor") + ylab("Amount Dispensed") + geom_abline(slope=2, intercept=0, color="red") + 
-  annotate("text", label="y=2x", x= 3.5, y=6.5, size=10, color="red")
-ICplot 
-```
-
-
-</div>
-
-<div style="float: right; width: 30%;">
-```{r echo=FALSE, out.width = '100%'}
-knitr::include_graphics("Ice_Cream.png")
-```
-
-
-
-### Model for Ice Cream Dispensor
-
-**True Model:**
-
-\[
-Y_i = 2X_i+\epsilon_i, \text{ where } \epsilon_i \sim \mathcal{N}(0,0.5)
-\]
-
-where    
-
-* $y_i$ represents amount dispesed for person $i$,     
-* $x_i$ represents time person $i$ holds dispensor    
-* $\epsilon_i$ is the error term, representing variation due to unobservable factors     
-
-### Simulating Data from a Model
-
-Suppose that 15 people use the icecream machine, taking the following amounts of time in seconds:
-
-```{r}
-set.seed(10082020)
-time <- c(1, 1.2, 1.5, 1.8, 2.1, 2.1, 2.3, 2.5, 2.6, 2.8, 2.9, 2.9, 3.1, 3.2, 3.6)
-```
-
-The code below simulates the amount of icecream dispensed for each person.  
-
-```{r}
-amount <- 2*time + rnorm(15, 0, 0.5)
-Icecream1 <- data.frame(time, amount)
-```
-
-```{r}
-kable(t(round(Icecream1, 2)))
-```
-
-### Scatterplot for Ice Cream Sample Data
-
-```{r, fig.height=4, fig.width = 7, echo=FALSE}
-ICplot
-```
-
-The red line represents the expectation function $E(Y_i) = 2X_i$.   
-
-### What We Actually Get to See
-
-```{r, fig.height=4, fig.width = 7, echo=FALSE}
-ggplot(data=Icecream1, aes(x=time, y=amount)) + geom_point() + ggtitle("Icecream Dispensed") + xlab("Time Pressing Dispensor") + ylab("Amount Dispensed")
-```
-
-
-### What We Actually Get to See (cont.)
-
-```{r, fig.height=4, fig.width = 7, echo=FALSE}
-ggplot(data=Icecream1, aes(x=time, y=amount)) + geom_point() + ggtitle("Icecream Dispensed") + xlab("Time Pressing Dispensor") + ylab("Amount Dispensed") + stat_smooth(method="lm", se=FALSE)
-```
-
-The blue line represents the least squares regression line.    
-
-### Estimation in Ice Cream Example
-
-Assume we know that the model has the form $Y_i=\beta_0 + \beta_1X + \epsilon_i$, where $\epsilon_i \sim \mathcal{N}(0,\sigma)$, but we do not know the values of $\beta_0$, $\beta_1$, or $\sigma$.   
-
-* $b_0$ and $b_1$ are calculated by minimizing SSR, and serve as estimates of $\beta_0$ and $\beta_1$
-*  are calculated by minimizing SSR, and serve as estimates of $\beta_0$ and $\beta_1$
-* $s=\sqrt{\frac{\displaystyle\sum_{i=1}^n(y_i-\hat{y}_i)^2}{(n-(p+1))}} = \sqrt{\frac{\displaystyle\sum_{i=1}^n(y_i-\hat{y}_i)^2}{(n-2)}} = \sqrt{\frac{\text{SSR}}{n-2}}$ is an estimate of $\sigma$.  
-
-### Ice Cream Model R Output
-
-
-```{r}
-IC_Model <- lm(data=Icecream1, lm(amount~time))
-summary(IC_Model)
-```
-
-### Ice Cream Model: Estimated Regression Equation
-
-* The estimated regression equation is $E(Y_i) = `r IC_Model$coef[1]` + `r IC_Model$coef[2]`\times X_i$    
-
-* The estimate $b_0 = `r IC_Model$coef[1]`$ is close to the true value of $\beta_0 = 0$   
-* The estimate $b_1 = `r IC_Model$coef[2]`$ is close to the true value of $\beta_1 = 2$. 
-* The estimate $s = `r summary(IC_Model)$sigma`$ is close to the true value of $\sigma = 0.5$. 
-
-Remember that in a real situation, we would not know the values of $\beta_0$ and $\beta_1$, or $\sigma$ and would have only estimates $b_0$ and $b_1$, and $s$.   
-
-### What We Actually Get to See
-
-```{r, fig.height=4, fig.width = 7, echo=FALSE}
-ggplot(data=Icecream1, aes(x=time, y=amount)) + geom_point() + ggtitle("Icecream Dispensed") + xlab("Time Pressing Dispensor") + ylab("Amount Dispensed")
-```
-
-
-### What We Actually Get to See (cont.)
-
-```{r, fig.height=4, fig.width = 7, echo=FALSE}
-ggplot(data=Icecream1, aes(x=time, y=amount)) + geom_point() + ggtitle("Icecream Dispensed") + xlab("Time Pressing Dispensor") + ylab("Amount Dispensed") + stat_smooth(method="lm", se=FALSE)
-```
-
-The blue line represents the least squares regression line.    
-
-
-### True and Estimated Regression Line
-
-```{r, fig.height=4, fig.width = 7, echo=FALSE}
-ICplot + stat_smooth(method = "lm", se=FALSE) + geom_abline(slope=2, intercept=0, color="red")
-```
-
-The red line represents the true expectation function $E(\text{Amount}) = 0 + 2\times\text{Time}$.   
-The blue line represents the estimated regression line $\widehat{\text{Amount}} = `r IC_Model$coef[1]` + `r IC_Model$coef[2]`\times\text{Time}$ 
-
-### Second Sample 
-
-```{r, echo=FALSE}
-time <- c(1, 1.2, 1.5, 1.8, 2.1, 2.1, 2.3, 2.5, 2.6, 2.8, 2.9, 2.9, 3.1, 3.2, 3.6)
-amount <- 2*time + rnorm(15, 0, 0.5)
-Icecream2 <- data.frame(time, amount)
-IC_Model <- lm(data=Icecream2, lm(amount~time))
-ICplot <- ggplot(data=Icecream2, aes(x=time, y=amount)) + geom_point() + ggtitle("Icecream Dispensed") + xlab("Time Pressing Dispensor") + ylab("Amount Dispensed") + geom_abline(slope=2, intercept=0, color="red")
-ICplot + stat_smooth(method="lm", se=FALSE)
-```
-
-The red line represents the expectation function $E(Y_i) = 2X_i$.   
-
-Estimated Regression Equation: $\widehat{\text{Amount}} = `r IC_Model$coef[1]` + `r IC_Model$coef[2]`\times \text{Time}$    
-
-Estimate of $\sigma$:  `r summary(IC_Model)$sigma`
-
-### Third Sample 
-
-```{r, echo=FALSE}
-time <- c(1, 1.2, 1.5, 1.8, 2.1, 2.1, 2.3, 2.5, 2.6, 2.8, 2.9, 2.9, 3.1, 3.2, 3.6)
-amount <- 2*time + rnorm(15, 0, 0.5)
-Icecream2 <- data.frame(time, amount)
-IC_Model <- lm(data=Icecream2, lm(amount~time))
-ICplot <- ggplot(data=Icecream2, aes(x=time, y=amount)) + geom_point() + ggtitle("Icecream Dispensed") + xlab("Time Pressing Dispensor") + ylab("Amount Dispensed") + geom_abline(slope=2, intercept=0, color="red")
-ICplot + stat_smooth(method="lm", se=FALSE)
-```
-
-The red line represents the expectation function $E(Y_i) = 2X_i$.   
-
-Estimated Regression Equation: $\widehat{\text{Amount}} = `r IC_Model$coef[1]` + `r IC_Model$coef[2]`\times \text{Time}$    
-
-Estimate of $\sigma$:  `r summary(IC_Model)$sigma` 
-
-### Fourth Sample 
-
-```{r, echo=FALSE}
-time <- c(1, 1.2, 1.5, 1.8, 2.1, 2.1, 2.3, 2.5, 2.6, 2.8, 2.9, 2.9, 3.1, 3.2, 3.6)
-amount <- 2*time + rnorm(15, 0, 0.5)
-Icecream2 <- data.frame(time, amount)
-IC_Model <- lm(data=Icecream2, lm(amount~time))
-ICplot <- ggplot(data=Icecream2, aes(x=time, y=amount)) + geom_point() + ggtitle("Icecream Dispensed") + xlab("Time Pressing Dispensor") + ylab("Amount Dispensed") + geom_abline(slope=2, intercept=0, color="red")
-ICplot + stat_smooth(method="lm", se=FALSE)
-```
-
-The red line represents the expectation function $E(Y_i) = 2X_i$.   
-
-Estimated Regression Equation: $\widehat{\text{Amount}} = `r IC_Model$coef[1]` + `r IC_Model$coef[2]`\times \text{Time}$    
-
-Estimate of $\sigma$:  `r summary(IC_Model)$sigma`
-
-### Fifth Sample 
-
-```{r, echo=FALSE}
-time <- c(1, 1.2, 1.5, 1.8, 2.1, 2.1, 2.3, 2.5, 2.6, 2.8, 2.9, 2.9, 3.1, 3.2, 3.6)
-amount <- 2*time + rnorm(15, 0, 0.5)
-Icecream2 <- data.frame(time, amount)
-IC_Model <- lm(data=Icecream2, lm(amount~time))
-ICplot <- ggplot(data=Icecream2, aes(x=time, y=amount)) + geom_point() + ggtitle("Icecream Dispensed") + xlab("Time Pressing Dispensor") + ylab("Amount Dispensed") + geom_abline(slope=2, intercept=0, color="red")
-ICplot + stat_smooth(method="lm", se=FALSE)
-```
-
-The red line represents the expectation function $E(Y_i) = 2X_i$.   
-
-Estimated Regression Equation: $\widehat{\text{Amount}} = `r IC_Model$coef[1]` + `r IC_Model$coef[2]`\times \text{Time}$    
-
-Estimate of $\sigma$:  `r summary(IC_Model)$sigma`
-
-### Generate Many Samples from IC Example
-
-Let's suppose that many more customers come along in groups of 15, and push the dispenser for the same amounts of time as the group in our original sample. We'll calculate $b_0$, $b_1$, and $s$ for each sample. 
-
-This gives us the sampling distributions for each of these three statistics. 
-
-We'll also store the standard errors for $b_0$ and $b_1$, which we'll use later. 
-
-```{r}
-b0 <- rep(NA, 10000)
-b1 <- rep(NA, 10000)
-SEb0 <- rep(NA, 10000)
-SEb1 <- rep(NA, 10000)
-
-for (i in 1:10000){
-e <- rnorm(15, 0, 0.5)
-y <- 2*time+e
-df <- data.frame(time, y)
-M <- lm(data=df, y~time)
-b0[i] <- M$coef[1]
-b1[i] <- M$coef[2]
-SEb0[i] <- summary(M)$coefficients[1,2]
-SEb1[i] <- summary(M)$coefficients[2,2]
-}
-IC_SampDist <- data.frame(b0, b1, SEb0, SEb1)
-```
-
-
-### Distribution of $\frac{b_0 - \beta_0}{SE(b_0)}$ and $\frac{b_1 - \beta_1}{SE(b_1)}$ 
-
-<div style="float: left; width: 50%;">
-
-
-```{r, fig.height=2, fig.width=5}
-ggplot(data=IC_SampDist, aes(x=(b0-0)/SEb0)) + 
-  geom_density(fill="lightblue", color="white") + stat_function(fun=dt)
-```
-
-</div>
-
-<div style="float: left; width: 50%;">
-
-
-```{r, fig.height=2, fig.width=5}
-ggplot(data=IC_SampDist, aes(x=(b1-2)/SEb1)) + 
-  geom_density(fill="lightblue", color="white")
-```
-
-
-### Distribution of $\frac{{b_j}-\beta_j}{\text{SE}(b_j)}$  
- 
 **Important Fact:** If $Y_i = \beta_0 + \beta_1X_{i1}+ \ldots + \beta_pX_{ip} + \epsilon_i$, with $\epsilon_i\sim\mathcal{N}(0,\sigma)$,  then   
 
 \[
@@ -5985,19 +5528,8 @@ t= \frac{{b_j}-\beta_j}{\text{SE}(b_j)}
 \]
 
 follows a t-distribution with $n-(p+1)$ degrees of freedom.  
-
-## Tests and Intervals in Normal Error Regression Model
-
 
 ### Confidence Interval for $\beta_j$
-
-**Important Fact:** If $Y_i = \beta_0 + \beta_1X_{i1}+ \ldots + \beta_pX_{ip} + \epsilon_i$, with $\epsilon_i\sim\mathcal{N}(0,\sigma)$,  then   
-
-\[
-t= \frac{{b_j}-\beta_j}{\text{SE}(b_j)}  
-\]
-
-follows a t-distribution with $n-(p+1)$ degrees of freedom.  
 
 
 A 95% confidence interval for $\beta_j$ is given by
@@ -6019,103 +5551,48 @@ t=\frac{{b_j}-\gamma}{\text{SE}(b_j)},
 
 and calculate a p-value using a t-distribution with $n-(p+1)$ df.   
 
+### Mercury Levels in Lakes in Northern and Southern Florida
 
-### Theory-Based CI for $\beta_0$ in Ice Cream Example
+```{r}
+summary(Lakes_M)
+```
+
+###  Hypothesis Test for Lakes in North and South Florida
+
+**Null Hypothesis:** There is no difference in average mercury levels between Northern and Southern Florida ($\beta_1=0$).   
+
+**Alternative Hypothesis:** There is a difference in average mercury levels in Northern and Southern Florida ($\beta_1\neq 0$).  
+
+**Test Statistic**: $t=\frac{{b_j}-\gamma}{\text{SE}(b_j)} = \frac{0.27195-0}{0.08985} = 3.027$ on $53-2 = 51$ degrees of freedom.  
+
+**Key Question:** What is the probability of getting a t-statistic as extreme as 3.027 if $\beta_1=0$ (i.e. there is no difference in mercury levels between northern and southern lakes).  
+
+### t-statistic and p-value
+
+```{r, echo=FALSE, fig.height=1.5, fig.width=6}
+ts=3.027
+gf_dist("t", df=51, geom = "area", fill = ~ (abs(x)< abs(ts)), show.legend=FALSE) + geom_vline(xintercept=c(ts, -ts), color="red")  + xlab("t")
+```
+
+```{r}
+2*pt(-abs(ts), df=51)
+```
+
+The low p-value gives us strong evidence of a difference in average mercury levels between lakes in Northern and Southern Florida.  
+
+### Theory-Based CI for $\beta_1$ in Florida Lakes
 
 **95% confidence interval for $\beta_0$:**     
 
 \[
-b_0\pm t^*\text{SE}(b_0) = `r IC_Model$coef[1]` \pm `r 2` \times `r summary(IC_Model)$coeff[1,2]`
+\text{Statistic} \pm 2\times\text{Standard Error}
 \]
-
-```{r}
-b0 <- summary(IC_Model)$coefficients[1,1]
-SEb0 <- summary(IC_Model)$coefficients[1,2]
-c(b0 - 2*SEb0, b0 + 2*SEb0)
-```
-
-We can be 95% confident that $\beta_0$ is between `r round(b0 - 2*SEb0,2)` and `r round(b0 + 2*SEb0,2)`. 
-
-
-### Theory-Based CI for $\beta_1$ in Ice Cream Example
-
-**95% confidence interval for $\beta_1$:**     
 
 \[
-b_1\pm 2\text{SE}(b_1) = `r IC_Model$coef[2]` \pm `r 2` \times `r summary(IC_Model)$coeff[2,2]`
+0.27195 \pm 2(0.08985)
 \]
 
-```{r}
-b1 <- summary(IC_Model)$coefficients[2,1]
-SEb1 <- summary(IC_Model)$coefficients[2,2]
-c(b1 - 2*SEb1, b1 + 2*SEb1)
-```
-
-We can be 95% confident that $\beta_1$ is between `r round(b1 - 2*SEb1,2)` and `r round(b1 + 2*SEb1,2)`, meaning that we expect that the average amount of ice cream dispensed per second held is between `r round(b1 - 2*SEb1,2)` and `r round(b1 + 2*SEb1,2)` oz. 
-
-
-
-
-### Confidence Interval in R
-
-We can calculate t-distribution based confidence intervals automatically, using the `confint` command.
-
-```{r}
-confint(IC_Model, level=0.95)
-```
-
-### IC Example: Hypothesis Test for $\beta_0 = 0$
-
-Null Hypothesis: $\beta_0=0$
-
-Test Statistic: $t=\frac{b_0-0}{\text{SE}(b_0)}=\frac{`r IC_Model$coef[1]` - 0 }{`r summary(IC_Model)$coeff[1,2]`} = `r summary(IC_Model)$coeff[1,3]`$
-
-p-value:
-```{r}
-b0 <- summary(IC_Model)$coeff[1,1]; SEb0 <- summary(IC_Model)$coeff[1,2]
-ts <- (b0-0)/SEb0
-```
-
-```{r, echo=FALSE, fig.height=1.5, fig.width=6}
-gf_dist("t", df=13, geom = "area", fill = ~ (abs(x)< abs(ts)), show.legend=FALSE) + geom_vline(xintercept=c(ts, -ts), color="red")  + xlab("t")
-```
-
-```{r}
-2*pt(-abs(ts), df=13)
-```
-
-Since the p-value is large, it is plausible that $\beta_0=0$
-
-
-### IC Example: Hypothesis Test for $\beta_1 = 0$
-
-Null Hypothesis: $\beta_1=0$
-
-Test Statistic: $t=\frac{b_1-0}{\text{SE}(b_1)}=\frac{`r IC_Model$coef[2]` - 0 }{`r summary(IC_Model)$coeff[2,2]`} = `r summary(IC_Model)$coeff[2,3]`$
-
-p-value:
-```{r}
-b1 <- summary(IC_Model)$coeff[2,1]; SEb1 <- summary(IC_Model)$coeff[2,2]
-ts <- (b1-0)/SEb1
-```
-
-```{r, echo=FALSE, fig.height=1.25, fig.width=6}
-gf_dist("t", df=13, geom = "area", fill = "turquoise", show.legend=FALSE) + geom_vline(xintercept=c(ts, -ts), color="red")  + xlab("t")
-```
-
-```{r}
-2*pt(-abs(ts), df=13)
-```
-
-Since the p-value is low, there is strong evidence against $\beta_1=0$. Thus, there is evidence of a relationship between time pressed and amount dispensed. 
-
-### t-statistics and p-values in R
-
-Note that our results match the coefficients table in the R model output. 
-
-```{r}
-summary(IC_Model)
-```
+We can be 95% confident that average mercury level is between 0.09 and 0.45 ppm higher in Southern Florida, than Northern Florida.  
 
 ### Coefficients Table in R Output
 
@@ -6130,8 +5607,6 @@ For $\hat{Y} = b_0 + b_1 X_{i1} + b_2X_{i2}+ \ldots + b_pX_{ip}$,
 * **Pr(>|t|)** is a p-value for the hypothesis test of whether quantity represented $b_j$ could plausibly be 0.   
 
 This p-value is an approximation of the kind of p-value we have obtained through simulation. It is reliable only when certain assumptions are reasonable.    
-
-
 
 
 ## F-Distribution
@@ -6666,8 +6141,8 @@ A Normal quantile-quantile plot displays quantiles of the residuals against the 
 * Severe departures from diagonal line indicate a problem with normality assumption. 
 
 ```{r, fig.height=3, fig.width=6}
-P1 <- ggplot(data=Violations, aes(sample = no_viol_Model$residuals)) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("No Violation")
-P2 <- ggplot(data=Violations, aes(sample = norm_viol_Model$residuals)) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("Violation of Normality Assumption")
+P1 <- ggplot(data=Violations, aes(sample = scale(no_viol_Model$residuals))) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("No Violation") + xlim(c(-3,3)) + ylim(c(-3,3))
+P2 <- ggplot(data=Violations, aes(sample = scale(norm_viol_Model$residuals))) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("Violation of Normality Assumption") + xlim(c(-3,3)) + ylim(c(-3,3))
 grid.arrange(P1, P2, ncol=2)
 ```
 
@@ -6724,7 +6199,7 @@ We should only use the p-values and confidence intervals provided by R, which de
 ```{r, fig.width=10}
 P1 <- ggplot(data=Cars2015, aes(y=Cars_M_A060$residuals, x=Cars_M_A060$fitted.values)) + geom_point() + ggtitle("Cars Model Residual Plot") + xlab("Predicted Values") + ylab("Residuals")
 P2 <- ggplot(data=Cars2015, aes(x=Cars_M_A060$residuals)) + geom_histogram() + ggtitle("Histogram of Residuals") + xlab("Residual")
-P3 <- ggplot(data=Cars2015, aes(sample = Cars_M_A060$residuals)) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("Cars Model QQ Plot")
+P3 <- ggplot(data=Cars2015, aes(sample = scale(Cars_M_A060$residuals))) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("Cars Model QQ Plot")
 grid.arrange(P1, P2, P3, ncol=3)
 ```
 
@@ -6836,7 +6311,7 @@ We should only use the p-values and confidence intervals provided by R, which de
 ```{r, fig.width=10}
 P1 <- ggplot(data=FloridaLakes, aes(y=Lakes_M$residuals, x=Lakes_M$fitted.values)) + geom_point() + ggtitle("Lakes Model Residual Plot") + xlab("Predicted Values") + ylab("Residuals")
 P2 <- ggplot(data=FloridaLakes, aes(x=Lakes_M$residuals)) + geom_histogram() + ggtitle("Lakes of Residuals") + xlab("Residual")
-P3 <- ggplot(data=FloridaLakes, aes(sample = Lakes_M$residuals)) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("Lakes Model QQ Plot")
+P3 <- ggplot(data=FloridaLakes, aes(sample = scale(Lakes_M$residuals))) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("Lakes Model QQ Plot")
 grid.arrange(P1, P2, P3, ncol=3)
 ```
 
@@ -6924,7 +6399,7 @@ ggplot(data=Cars2015, aes(y=LowPrice, x=Acc060)) + geom_point() + ggtitle("Car P
 ```{r, fig.width=10}
 P1 <- ggplot(data=Cars2015, aes(y=Cars_M_A060$residuals, x=Cars_M_A060$fitted.values)) + geom_point() + ggtitle("Cars Model Residual Plot") + xlab("Predicted Values") + ylab("Residuals")
 P2 <- ggplot(data=Cars2015, aes(x=Cars_M_A060$residuals)) + geom_histogram() + ggtitle("Histogram of Residuals") + xlab("Residual")
-P3 <- ggplot(data=Cars2015, aes(sample = Cars_M_A060$residuals)) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("Cars Model QQ Plot")
+P3 <- ggplot(data=Cars2015, aes(sample = scale(Cars_M_A060$residuals))) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("Cars Model QQ Plot")
 grid.arrange(P1, P2, P3, ncol=3)
 ```
 
@@ -6965,7 +6440,7 @@ We should only use the p-values and confidence intervals provided by R, which de
 ```{r, echo=FALSE, fig.width=9}
 P1 <- ggplot(data=Cars2015, aes(y=Cars_M_Log$residuals, x=Cars_M_Log$fitted.values)) + geom_point() + ggtitle("Cars Log Model Residual Plot") + xlab("Predicted Values") + ylab("Residuals")
 P2 <- ggplot(data=Cars2015, aes(x=Cars_M_Log$residuals)) + geom_histogram() + ggtitle("Histogram of Residuals") + xlab("Residual")
-P3 <- ggplot(data=Cars2015, aes(sample = Cars_M_Log$residuals)) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("Cars Model QQ Plot")
+P3 <- ggplot(data=Cars2015, aes(sample = scale(Cars_M_Log$residuals))) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("Cars Model QQ Plot")
 grid.arrange(P1, P2, P3, ncol=3)
 ```
 
@@ -6983,7 +6458,8 @@ Thus
 $$
 \begin{aligned}
 \widehat{\text{Price}} & = e^{b_0 + b_1\times \text{Acc060} } \\
- & e^{b_0}e^{b_1 \times \text{Acc060}}
+ & e^{b_0}e^{b_1 \times \text{Acc060}} \\
+ & e^{b_0}(e^{b_1})^\text{Acc060}
 \end{aligned}
 $$
 
@@ -7029,6 +6505,15 @@ exp(predict(Cars_M_Log, newdata=data.frame(Acc060=c(7))))
 A car that accelerates from 0 to 60 mph in 7 seconds is expected to cost 36.3 thousand dollars.  
 
 ### Model Interpretations for Transformed Model
+
+$$
+\begin{aligned}
+\widehat{\text{Price}} & = e^{b_0 + b_1\times \text{Acc060} } \\
+ & e^{b_0}e^{b_1 \times \text{Acc060}} \\
+ & e^{b_0}(e^{b_1})^\text{Acc060}
+\end{aligned}
+$$
+
 
 * $e^{b_0}$ is theoretically the expected price of a car that can accelerate from 0 to 60 mph in no time, but this is not a meaningful interpretation. 
 
@@ -7219,6 +6704,7 @@ Kahneman and Tversky write that :
 *"We normally reinforce others when their behavior is good and punish them when their behavior is bad. By regression alone, therefore, they [the trainees] are most likely to improve after being punished and most likely to deteriorate after being rewarded. Consequently, we are exposed to a lifetime schedule in which we are most often rewarded for punishing others, and punished for rewarding."*
 
 
+
 # Logistic Regression
 
 ## Logistic Regression
@@ -7367,7 +6853,7 @@ predict(CCDefault_M, newdata=data.frame((balance=1500)), type="response")
 predict(CCDefault_M, newdata=data.frame((balance=2000)), type="response")
 ```
 
-### Where to the b's come from?      
+### Where do the b's come from?      
 
 * Recall that for a quantitative response variable, the values of $b_1, b_2, \ldots, b_p$ are chosen in a way that minimizes $\displaystyle\sum_{i=1}^n \left(y_i-(\beta_0+\beta_1x_{i1}+\ldots+\beta_px_{ip})^2\right)$. 
 
@@ -7553,6 +7039,8 @@ P(\text{Default}) = \hat{\pi}_i =  \frac{e^{-10.87+0.0058\times\text{balance}-0.
 * For categorical $x_j$, when all other explanatory variables are held constant, the odds of "success" are $e^\beta_j$ times higher for category $j$ than for the "baseline category."    
 
 * For models with interaction, we can only interpret $\beta_j$ when the values of all other explanatory variables are given (since the effect of $x_j$ depends on the other variables.)
+
+<!--
 
 # Building Models for Interpretation
 
@@ -7778,7 +7266,7 @@ summary(Cars_M7)
 ```{r, echo=FALSE, fig.width=9}
 P1 <- ggplot(data=data.frame(Cars_M7$residuals), aes(y=Cars_M7$residuals, x=Cars_M7$fitted.values)) + geom_point() + ggtitle("Residual Plot") + xlab("Predicted Values") + ylab("Residuals")
 P2 <- ggplot(data=data.frame(Cars_M7$residuals), aes(x=Cars_M7$residuals)) + geom_histogram() + ggtitle("Histogram of Residuals") + xlab("Residual")
-P3 <- ggplot(data=data.frame(Cars_M7$residuals), aes(sample = Cars_M7$residuals)) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("QQ Plot")
+P3 <- ggplot(data=data.frame(Cars_M7$residuals), aes(sample = scale(Cars_M7$residuals))) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("QQ Plot")
 grid.arrange(P1, P2, P3, ncol=3)
 ```
 
@@ -7881,7 +7369,7 @@ grid.arrange(P1, P2, ncol=2)
 ```{r, echo=FALSE, fig.width=9}
 P1 <- ggplot(data=data.frame(Bears_M2_MLR$residuals), aes(y=Bears_M2_MLR$residuals, x=Bears_M2_MLR$fitted.values)) + geom_point() + ggtitle("Residual Plot") + xlab("Predicted Values") + ylab("Residuals")
 P2 <- ggplot(data=data.frame(Bears_M2_MLR$residuals), aes(x=Bears_M2_MLR$residuals)) + geom_histogram() + ggtitle("Histogram of Residuals") + xlab("Residual")
-P3 <- ggplot(data=data.frame(Bears_M2_MLR$residuals), aes(sample = Bears_M2_MLR$residuals)) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("QQ Plot")
+P3 <- ggplot(data=data.frame(Bears_M2_MLR$residuals), aes(sample = scale(Bears_M2_MLR$residuals))) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("QQ Plot")
 grid.arrange(P1, P2, P3, ncol=3)
 ```
 
@@ -7976,7 +7464,7 @@ summary(SAT_M3)
 ```{r, echo=FALSE, fig.width=9}
 P1 <- ggplot(data=data.frame(SAT_M3$residuals), aes(y=SAT_M3$residuals, x=SAT_M3$fitted.values)) + geom_point() + ggtitle("Residual Plot") + xlab("Predicted Values") + ylab("Residuals")
 P2 <- ggplot(data=data.frame(SAT_M3$residuals), aes(x=SAT_M3$residuals)) + geom_histogram() + ggtitle("Histogram of Residuals") + xlab("Residual")
-P3 <- ggplot(data=data.frame(SAT_M3$residuals), aes(sample = SAT_M3$residuals)) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("QQ Plot")
+P3 <- ggplot(data=data.frame(SAT_M3$residuals), aes(sample = scale(SAT_M3$residuals))) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("QQ Plot")
 grid.arrange(P1, P2, P3, ncol=3)
 ```
 
@@ -8005,7 +7493,7 @@ summary(SAT_M4)
 ```{r, echo=FALSE, fig.width=9}
 P1 <- ggplot(data=data.frame(SAT_M4$residuals), aes(y=SAT_M4$residuals, x=SAT_M4$fitted.values)) + geom_point() + ggtitle("Residual Plot") + xlab("Predicted Values") + ylab("Residuals")
 P2 <- ggplot(data=data.frame(SAT_M4$residuals), aes(x=SAT_M4$residuals)) + geom_histogram() + ggtitle("Histogram of Residuals") + xlab("Residual")
-P3 <- ggplot(data=data.frame(SAT_M4$residuals), aes(sample = SAT_M4$residuals)) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("QQ Plot")
+P3 <- ggplot(data=data.frame(SAT_M4$residuals), aes(sample = scale(SAT_M4$residuals))) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("QQ Plot")
 grid.arrange(P1, P2, P3, ncol=3)
 ```
 
@@ -9300,7 +8788,7 @@ P1 <- ggplot(data=data.frame(M$residuals), aes(y=M$residuals, x=M$fitted.values)
   ggtitle("Model Residual Plot") + xlab("Predicted Values") + ylab("Residuals")
 P2 <- ggplot(data=data.frame(M$residuals), aes(x=M$residuals)) + geom_histogram() + 
   ggtitle("Histogram of Residuals") + xlab("Residual")
-P3 <- ggplot(data=data.frame(M$residuals), aes(sample = M$residuals)) + stat_qq() + 
+P3 <- ggplot(data=data.frame(M$residuals), aes(sample = scale(M$residuals))) + stat_qq() + 
   stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("Model QQ Plot")
 grid.arrange(P1, P2, P3, ncol=3)
 ```
