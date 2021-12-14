@@ -6750,71 +6750,37 @@ There are a lot of problems with this model!
 
 ### Transforming into interval (0,1)
 
-* When $Y$ takes on only values 0 or 1, $E(Y)$ can be interpreted as the probability that $Y=1$ (dentoed $P(Y=1)$)      
+* Starting with our linear model $E(Y_i) = \beta_0+\beta_1x_{i1}$, we need to transform $\beta_0+\beta_1x_{i1}$ into (0,1). 
 
-* The simple linear regression model assumes that $E(Y_i) = \beta_0+\beta_1x_i$. More generally, te normal error regression model assumes $E(Y_i) = \beta_0+\beta_1x_{i1} + \ldots \beta_px_{ip}$
+* Let $\pi_i = \frac{e^{\beta_0+\beta_1x_{i1} }}{1+e^{\beta_0+\beta_1x_{i1}}}$. 
 
-* Assuming $E(Y_i)$ is a linear function of the $x's$ allows $Y_1$ to take on values outside (0,1).   
-
-* In order to obtain sensible probability estimates, we need to transform the values of $\beta_0+\beta_1x_i$ into the interval (0,1). 
-
-* To accomplish this, we'll use the function. 
-\[
-f(t)=\frac{e^t}{1+e^{t}}
-\]
-
-
-### Transforming to (0,1)
-
-The function $f(t)=\frac{e^t}{1+e^{t}}$ takes any real number $t$ and returns a number in the interval (0,1).  
+* Then $0 \leq \pi_i \leq 1$, and $\pi_i$ represents an estimate of $P(Y_i=1)$.    
 
 ```{r, fig.height=3, fig.width=8, echo=FALSE}
 x <- seq(from=-5, 5, by=0.01)
 y <- exp(x)/ (1+exp(x))
 df <- data.frame(x, y)
-gf_line(data=df, y~x)  %>% gf_labs(x=expression(beta[0]+beta[1]*x[i]), y=expression(f(x[i]))) + xlab("y") + ylab("f(t)")
+gf_line(data=df, y~x) + xlab(expression(beta[0]+beta[1]*x[i])) + ylab(expression(pi[i]))
 ```
 
+* This function maps the values of $\beta_0+\beta_1x_{i1}$ into the interval (0,1). 
 
-### The Logit Function
-
-* If $p=\frac{e^t}{1+e^t}$, then $t=\text{log}\left(\frac{p}{1-p} \right)$. 
-
-* The function $f(p) = \text{log}\left(\frac{p}{1-p} \right)$ for $p \in (0,1)$ is called the **logit function**.  
-
-* We can interpret $p$ as $P(Y=1)$, and $\frac{p}{1-p}$ is called the **odds** of $Y=1$.   
-
-* Thus, $\text{logit}(p) = \text{log}\left(\frac{p}{1-p} \right)$ returns the log of the odds.    
-
-* The function $f(t)=\frac{e^t}{1+e^t}$ for $t \in (-\infty, \infty)$ is called the inverse logit function.   
-
-
-### The Logistic Regression Model
-
-* Starting with our linear model $E(Y_i) = \beta_0+\beta_1x_{i1} + \ldots \beta_px_{ip}$, we need to transform $\beta_0+\beta_1x_{i1} + \ldots \beta_px_{ip}$ into (0,1). 
-
-* Let $\pi_i = \frac{e^{\beta_0+\beta_1x_{i1} + \ldots \beta_px_{ip}}}{1+e^{\beta_0+\beta_1x_{i1} + \ldots \beta_px_{ip}}}$     
-
-* Then $0 \leq \pi_i \leq 1$, and $\pi_i$ represents an estimate of $P(Y_i=1)$.    
 
 * The **logistic regression model** assumes that:    
 
     * $Y_i \in \{0,1\}$     
-    * $P(Y_i=1) = \pi_i=\frac{e^{\beta_0+\beta_1x_{i1} + \ldots \beta_px_{ip}}}{1+e^{\beta_0+\beta_1x_{i1} + \ldots \beta_px_{ip}}}$
+    * $E(Y_i) = P(Y_i=1) = \pi_i=\frac{e^{\beta_0+\beta_1x_{i1} + \ldots \beta_px_{ip}}}{1+e^{\beta_0+\beta_1x_{i1} + \ldots \beta_px_{ip}}}$
 
-i.e. $\beta_0+\beta_1x_{i1} + \ldots \beta_px_{ip}= \text{log}\left(\frac{\pi_i}{1-\pi_i}\right)$. 
-
+i.e. $\beta_0+\beta_1x_{i1} + \ldots \beta_px_{ip}= \text{log}\left(\frac{\pi_i}{1-\pi_i}\right).$ (This is called the logit function and can be written $\text{logit}(\pi_i)$.   
 
 * Instead of assuming that the expected response is a linear function of the explanatory variables, we are assuming that it is a function of a linear function of the explanatory variables.   
-
-* This is an example of a *generalized linear model*, a topic that will be explored in detail in STAT 455.     
-
 
 
 ### Logistic Regression Model for Balance
 
 ```{r, fig.height=3, fig.width=8, message=FALSE, warning=FALSE}
-ggplot(data=Default, aes(y=default, x= balance)) + geom_point(alpha=0.2) + stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial)) 
+ggplot(data=Default, aes(y=default, x= balance)) + geom_point(alpha=0.2) + 
+  stat_smooth(method="glm", se=FALSE, method.args = list(family=binomial)) 
 ```
 
 ### Fitting the Logistic Regression Model in R
@@ -6891,8 +6857,9 @@ P(\text{Default}) = \hat{\pi}_i =  \frac{e^{-10.65+0.0055\times\text{balance}}}{
 * For a \$2,000 balance, the estimated default probability is $\hat{\pi}_i=\frac{e^{10.65+0.0055(2000) }}{1+e^{10.65+0.0055(2000)}} \approx 0.5857694$
 
 
-
 ### Odds 
+
+For an event with probability $p$, the odds of the event occurring are $\frac{p}{1-p}$. 
 
 The odds of default are given by $\frac{\pi_i}{1-\pi_i}$.
 
@@ -6957,9 +6924,6 @@ confint(M, level = 0.95)
 We are 95% confident that a 1 dollar increase in credit card balance is associate with an increased odds of default by a factor between $e^{0.00508}\approx 1.0051$ and $e^{0.00594}\approx 1.0060$.
 
 This is a profile-likelihood interval, which you can read more about [here](https://rpubs.com/FJRubio/PLCIN). 
-
-
-
 
 
 ## Multiple Logistic Regression
@@ -7040,7 +7004,7 @@ P(\text{Default}) = \hat{\pi}_i =  \frac{e^{-10.87+0.0058\times\text{balance}-0.
 
 * For models with interaction, we can only interpret $\beta_j$ when the values of all other explanatory variables are given (since the effect of $x_j$ depends on the other variables.)
 
-<!--
+
 
 # Building Models for Interpretation
 
@@ -7356,7 +7320,7 @@ Bears_M2_MLR <- lm(data=Bears_Subset, log(Weight)~log(Age) + Sex + Length + Seas
 summary(Bears_M2_MLR)
 ```
 
-### Bears Model: Residuals by Explanatory Varaible Plots
+### Bears Model: Residuals by Explanatory Variable Plots
 
 ```{r, echo=FALSE, fig.width=9}
 P1 <- ggplot(data=data.frame(Bears_M2_MLR$residuals), aes(y=Bears_M2_MLR$residuals, x=Bears_M2_MLR$model$`log(Age)`)) + geom_point() + ggtitle("Bears Model Residual Plot") + xlab("Log Age") + ylab("Residuals") 
@@ -7372,6 +7336,7 @@ P2 <- ggplot(data=data.frame(Bears_M2_MLR$residuals), aes(x=Bears_M2_MLR$residua
 P3 <- ggplot(data=data.frame(Bears_M2_MLR$residuals), aes(sample = scale(Bears_M2_MLR$residuals))) + stat_qq() + stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("QQ Plot")
 grid.arrange(P1, P2, P3, ncol=3)
 ```
+
 
 ## Modeling SAT scores: Simpson's Paradox and Quadratic Terms
 
@@ -7543,7 +7508,7 @@ We do see some possible quadratic trend, but we should be really careful about e
 * There is no clear reason to expect an interaction between these variables, so we did not include an interaction effect in the model.  
 
 
-## Polynomial Regression
+## Polynomial Regression, Adjusted $R^2$, AIC, and BIC
 
 ### Car Price and Fuel Capacity
 
@@ -7642,122 +7607,9 @@ kable(R2tab)
 ```
 
 
-
-
-### Model Complexity: Simulation Example
-
-```{r}
-set.seed(02252019)
-x <- runif(10000, 0, 10)
-y <- 2 + 3*x + rnorm(10000,0, 5)
-df <- data.frame(x,y)
-```
-
-### Plot of Simulated Data
-
-```{r, fig.height=5, fig.width=8, echo=FALSE}
-ggplot(data=df, aes(y=y, x=x)) + geom_point()
-```
-
-### Selecting a Random Sample of 100
-
-```{r}
-samp <- sample(1:nrow(df), 20) 
-Sampdf <- df[samp, ]
-df$samp <- rownames(df) %in% samp
-df <- df %>% arrange(samp)
-```
-
-### Plot Including Sample
-
-```{r, fig.height=5, fig.width=8, echo=FALSE}
-ggplot(data=df, aes(y=y, x=x, color=samp, size=samp))+geom_point()
-```
-
-
-
-
-### Plot of Sample Data
-
-```{r, fig.height=5, fig.width=8, echo=FALSE}
-ggplot(data=Sampdf, aes(y=y, x=x))+geom_point() 
-```
-
-
-### Linear Model to Sample Data {.smaller}
-
-```{r, fig.height=5, fig.width=8, echo=FALSE}
-ggplot(data=Sampdf, aes(y=y, x=x))+geom_point() + stat_smooth(method="lm", se=FALSE) 
-```
-
-
-### Cubic Model {.smaller}
-
-```{r, fig.height=5, fig.width=8, echo=FALSE}
-ggplot(data=Sampdf, aes(y=y, x=x)) + geom_point() + stat_smooth(method="lm", se=FALSE) + stat_smooth(method="lm", se=TRUE, fill=NA, formula=y ~ poly(x, 3, raw=TRUE),colour="red")  
-```
-
-
-### Eighth-Degree Model {.smaller}
-
-```{r, fig.height=5, fig.width=8, echo=FALSE}
-ggplot(data=Sampdf, aes(y=y, x=x)) + geom_point() + stat_smooth(method="lm", se=FALSE) + stat_smooth(method="lm", se=TRUE, fill=NA, formula=y ~ poly(x, 3, raw=TRUE),colour="red") + stat_smooth(method="lm", se=TRUE, fill=NA, formula=y ~ poly(x, 8, raw=TRUE),colour="green")  
-```
-
-### $R^2$ Values for Polynomial Models
-
-```{r}
-Sim_M1 <-lm(data=Sampdf, y~x); summary(Sim_M1)$r.squared
-```
-
-```{r}
-Sim_M2 <- lm(data=Sampdf, y~x+I(x^2)+I(x^3)); summary(Sim_M2)$r.squared
-```
-
-```{r}
-Sim_M3 <- lm(data=Sampdf, y~x+I(x^2)+I(x^3)+I(x^4)+I(x^5)+I(x^6)+I(x^7)+I(x^8)); summary(Sim_M3)$r.squared
-```
-
-### Predicting Data from Larger Population
-
-```{r, echo=FALSE}
-equation0 <- function(x){2 + 3*x}
-equation1 <- function(x){coef(Sim_M1)[1] + coef(Sim_M1)[2]*x}
-equation2 <- function(x){coef(Sim_M2)[1] + coef(Sim_M2)[2]*x+ coef(Sim_M2)[3]*x^2+ coef(Sim_M2)[4]*x^3}
-equation3  <- function(x){coef(Sim_M3)[1] + coef(Sim_M3)[2]*x+ coef(Sim_M3)[3]*x^2+ coef(Sim_M3)[4]*x^3 + coef(Sim_M3)[5]*x^4 + coef(Sim_M3)[6]*x^5 + coef(Sim_M3)[7]*x^6 + coef(Sim_M3)[8]*x^7 + coef(Sim_M3)[9]*x^8}
-```
-
-```{r, echo=FALSE, fig.height=4, fig.width=8}
-PM3 <- ggplot(data=df, aes(y=y, x=x)) + geom_point() + ylim(c(-10,50)) + 
-        stat_function(fun=equation0,geom="line",color="yellow", size=3) +
-        stat_function(fun=equation1,geom="line",color="blue", size=3) +
-        stat_function(fun=equation2,geom="line",color="red", size=3) +  
-        stat_function(fun=equation3,geom="line",color="green", size=3)   
-PM3
-```
-
-Although the higher-degree model fits the sample best, it is clear that the linear model is the correct one, and would perform better on future data. 
-
-The higher-degree models overfits the sample data, capturing sampling variability in addition to true signal. 
-
-
-### Model Complexity and Fit
-
-* Adding terms to a model can never decrease $R^2$. 
-
-* This is because adding new terms makes that model more flexible. At worse, the coefficients for the new term would be zero, and the model fit would be unchanged.    
-
-* This does NOT mean that adding new terms to the model will improve it's ability to predict future data, not used to train the model.   
-
-* Adding extra terms can cause the model to "overfit" the data on which it was trained, and thus perform worse on new data than a simpler model would. 
-
-* This applies to adding additional variables to a model, in addition to adding higher power terms in a polynomial model. 
-
-## Adjusted R^2, AIC, and BIC
-
 ### Variable Selection
 
-When additional variables are added to a model, RSS never increases, hence $R^2$ never decreases. 
+When additional variables are added to a model, SSR never increases, hence $R^2$ never decreases. 
 
 Other diagnostics have been introduced to decrease when a term is added to a model and does little to help explain variability. 
 
@@ -7877,6 +7729,7 @@ This illustrates a trade-off between model complexity and interpretation. More c
 * Use F-tests, AIC, BIC, Adjusted $R^2$ to balance goodness of fit with model complexity   
 * Avoid messy transformations where possible    
 * Aim for model complex enough to capture nature of data, but simple enough to give clear interpretations     
+
 
 
 # Building Models for Prediction
@@ -8414,476 +8267,47 @@ apply(RMSPE,2,mean)
 
 * We should use model 3 if we want to make predictions on new data. 
 
-
-
-## Variable Engineering
-
-### AirBnB Dataset
-
-We consider a dataset with information on AirBnB's in the United States. Data come from https://www.kaggle.com/rudymizrahi/airbnb-listings-in-major-us-cities-deloitte-ml. 
-
-Our goal is to predict the prices of AirBnB's usinf information from 21 potential explanatory variables. 
-
-```{r}
-Train <- read.csv("Train.csv")
-Test <- read.csv("Test.csv")
-```
-
-```{r}
-dim(Train)
-dim(Test)
-```
-
-### Gimpse of Training Data
-
-```{r}
-glimpse(Train)
-```
-
-### Gimpse of Test Data
-
-```{r}
-glimpse(Test)
-```
-
-
-### Distribution of Prices
-
-```{r, fig.cap = "Prices", fig.width=7, fig.height=5}
-ggplot(data=Train, aes(x=price)) + geom_histogram(fill="blue", color="white") + 
-  ylab("frequency") + xlab("Price") +ggtitle("Distribution of Prices")
-```
-
-### Prices by City
-
-```{r, fig.cap="Price Distribution by City", fig.width=7, fig.height=5}
-ggplot(data=Train, aes(y=price, x=city)) + geom_violin( aes(fill=city)) + geom_boxplot(width=0.2)
-
-```
-
-### Price by City
-
-```{r}
-T1 <- Train %>% group_by(city) %>% summarize(Mean_Price = mean(price), 
-                                             SD_Price = sd(price), 
-                                             N = n())
-kable(T1, caption="Average House Price by City")
-```
-
-
-### Price by Bedrooms
-
-```{r, fig.cap="Price by Bedrooms", fig.width=7, fig.height=5}
-ggplot(data=Train, aes(x=bedrooms, y=price)) + geom_point() + stat_smooth(method="lm")
-```
-
-### Correlation Plot
-
-```{r, fig.cap="Correlation Plot for Quantitative Variables", fig.width=6, fig.height=4}
-library(corrplot)
-Train_num <- select_if(Train, is.numeric)
-C <- cor(Train_num, use="pairwise.complete.obs")
-corrplot(C)
-```
-
-### Price by Room Type
-
-```{r}
-T2 <- Train %>% group_by(room_type) %>% summarize(Mean_Price = mean(price),
-                                                  SD_Price = sd(price), 
-                                                   N = n())
-kable(T2, caption="Average Price by Room Type")
-```
-
-### Price by Cancellation Policy
-
-```{r}
-T3 <- Train %>% group_by(cancellation_policy, cleaning_fee) %>% summarize(Mean_Price = mean(price), 
-                                             SD_Price = sd(price), 
-                                             N = n())
-kable(T3, caption="Average House Price by Cancellation Policy and Cleaning Fee")
-```
-
-### Feature Engineering
-
-Now, we'll create new variables, or modify existing variables. Include description of each variable you change and create, and relevant table or graph.  
-
-We convert the host response rate variable to numeric. 
-
-```{r}
-Train$host_response_rate <- str_remove(Train$host_response_rate, "%")
-Test$host_response_rate <- str_remove(Test$host_response_rate, "%")
-Train$host_response_rate <- as.numeric(as.character(Train$host_response_rate))
-Test$host_response_rate <- as.numeric(as.character(Test$host_response_rate))
-```
-
-### Price by Response Rate
-
-```{r, fig.cap="Price by Host Response Rate", fig.width=7, fig.height=5}
-ggplot(data=Train, aes(x=host_response_rate, y=price)) + geom_point() + 
-  stat_smooth(method="lm") + xlab("Host Response Rate") + ggtitle("Price by Host Response Rate")
-```
-
-
-### More Variable Engineering
-
-Our goal is to create new variables that might help up better predict price, than the ones originally contained in the dataset. 
-
-
-1. group together infrequent property types into a category called "other". We keep the four most frequent categories: apartment, house, townhouse, and condominium.  
-2. create a yes/no variable for whether or not there was a review in 2017.   
-3. create a yes/no variable for whether or not there was an online review.    
-4. modify the `host_has_profile_pic` and `host_identity_verified` variables to group missing values and false's together.    
-5. create a variable to tell whether the last review was made on a weekend. 
-
-### Code for Variable Engineering
-
-```{r}
-Train <- Train %>% mutate(property_type = fct_lump(property_type, n=4),
-                                            has_review = !is.na(review_scores_rating), 
-                                            host_has_profile_pic = host_has_profile_pic=="t", 
-                                            host_identity_verified = host_identity_verified =="t", 
-                                            weekend = weekdays(as.Date(last_review)) %in% c("Saturday", "Sunday")
-                                            )
-Test <- Test %>% mutate(property_type = fct_lump(property_type, n=4),
-                                            has_review = !is.na(review_scores_rating),
-                                            host_has_profile_pic = host_has_profile_pic=="t", 
-                                            host_identity_verified = host_identity_verified =="t",
-                                            weekend = weekdays(as.Date(last_review)) %in% c("Saturday", "Sunday")
-                                            )
-```
-
-### Removing Unneeded Variable
-
-Since we've used the `last_review` variable to create a variable, we'll get rid of the original one. 
-
-```{r}
-#Train <- Train %>% select(-c(last_review))
-#Test <- Test %>% select(-c(last_review))
-```
-
-### Price by Property Type
-
-```{r, fig.cap="Price Distribution by Property Type", fig.width=7, fig.height=5}
-ggplot(data=Train, aes(y=price, x=property_type)) + geom_violin( aes(fill=property_type)) + 
-  geom_boxplot(width=0.2)
-```
-
-### Price by Review
-
-```{r}
-T4 <- Train %>% group_by(has_review) %>% summarize(Mean_Price = mean(price),
-                                                  SD_Price = sd(price), 
-                                                   N = n())
-kable(T4, caption="Average Price by Recent Review")
-```
-
-### Price by Weeekend Review
-
-```{r}
-T5 <- Train %>% group_by(weekend) %>% summarize(Mean_Price = mean(price),
-                                                  SD_Price = sd(price), 
-                                                   N = n())
-kable(T5, caption="Average Price by Day of Review")
-```
-
-## Cross-Validation with  `caret`
-
-### `caret` Package
-
-We'll perform cross-validation, using the R package `caret`. It stands for Classification And REgression Training. 
-
-```{r, eval=FALSE}
-library(caret)
-```
-
-We'll perform 5 repeats of 5-fold cross validation. 
-
-```{r}
-control <- trainControl(method="repeatedcv", number=5, repeats=5 )
-```
-
-### Impute Missing Values
-
-We cannot fit a model when there are missing values in the data. We'll fill missing values by replacing them with the median value for that variable. 
-
-```{r}
-preProcValues <- preProcess(Train%>%select(-c(price)), method = c("medianImpute"))
-Train <- predict(preProcValues, Train)
-Test <- predict(preProcValues, Test)
-```
-
-### Models to Compare
-
-We consider 8 models:
-
-1. simple linear regression model using only bedrooms as explanatory variable.   
-2. multiple regression model with the four quantitative explanatory variables most highly correlated with price.    
-3. same variables as in (2), with interactions included.   
-4. multiple regression model with bedrooms, and two categorical variables: room type, and city.    
-5. same model as in (4), with interactions included. 
-6. multiple regression model with combination of categorical and quantitative variables mentioned so far.   
-7. model including almost all variables, and leaving out only those that we wouldn't expect to have much relationship with price ( latitude, longitude, id, zipcode, weekday, weekend)    
-8. model including all variables in the dataset
-
-### Models in R
-
-```{r, message=FALSE, warning=FALSE, cache=FALSE}
-set.seed(11082020)
-model1 <- train(data=Train, price ~ bedrooms,  method="lm", trControl=control)
-set.seed(11082020)
-model2 <- train(data=Train, price ~ bedrooms + accommodates + bathrooms + beds,  method="lm", trControl=control)
-set.seed(11082020)
-model3 <- train(data=Train, price ~ bedrooms * accommodates * bathrooms * beds,  method="lm", trControl=control)
-set.seed(11082020)
-model4 <- train(data=Train, price ~ bedrooms + city + room_type ,  method="lm", trControl=control)
-set.seed(11082020)
-model5 <- train(data=Train, price ~ bedrooms * city * room_type ,  method="lm", trControl=control)
-set.seed(11082020)
-model6 <- train(data=Train, price ~ bedrooms + accommodates + bathrooms + beds + city +room_type +  
-                  cancellation_policy + cleaning_fee ,  method="lm", trControl=control)
-set.seed(11082020)
-#exclude latitude, longitude, id, zipcode, weekday, weekend
-model7 <- train(data=Train, price ~ property_type + bed_type + host_has_profile_pic + bedrooms +  
-                  accommodates + bathrooms + beds + city +room_type + cancellation_policy +  
-                  cleaning_fee + host_identity_verified + host_response_rate + instant_bookable + 
-                  number_of_reviews + review_scores_rating+ has_review,  method="lm", trControl=control)
-set.seed(11082020)
-model8 <- train(data=Train, price ~ .,  method="lm", trControl=control)
-```
-
-### Record RMSPE for Each Model
-
-```{r, cache=FALSE}
-r1 <- model1$results$RMSE
-r2 <- model2$results$RMSE
-r3 <- model3$results$RMSE
-r4 <- model4$results$RMSE
-r5 <- model5$results$RMSE
-r6 <- model6$results$RMSE
-r7 <- model7$results$RMSE
-r8 <- model8$results$RMSE
-Model <- 1:8
-RMSPE <- c(r1, r2, r3, r4, r5, r6, r7, r8)
-Res <- data.frame(Model, RMSPE)
-```
-
-### MSPE's by Model
-
-Cross-Validation Results
-
-```{r, cache=FALSE}
-kable(Res)
-```
-
-### Models for log(price)
-
-We also consider predicting log(price), using the same 8 models. 
-
-```{r, message=FALSE, warning=FALSE, cache=FALSE}
-set.seed(11082020)
-model1 <- train(data=Train, log(price) ~ bedrooms,  method="lm", trControl=control)
-set.seed(11082020)
-model2 <- train(data=Train, log(price) ~ bedrooms + accommodates + bathrooms + beds,  
-                method="lm", trControl=control)
-set.seed(11082020)
-model3 <- train(data=Train, log(price) ~ bedrooms * accommodates * bathrooms * beds,  
-                method="lm", trControl=control)
-set.seed(11082020)
-model4 <- train(data=Train, log(price) ~ bedrooms + city + room_type ,  
-                method="lm", trControl=control)
-set.seed(11082020)
-model5 <- train(data=Train, log(price) ~ bedrooms * city * room_type ,  
-                method="lm", trControl=control)
-set.seed(11082020)
-model6 <- train(data=Train, log(price) ~ bedrooms + accommodates + bathrooms + beds + 
-                  city +room_type + cancellation_policy + cleaning_fee ,  method="lm", trControl=control)
-set.seed(11082020)
-#exclude latitude, longitude, id, zipcode, weekday, weekend
-model7 <- train(data=Train, log(price) ~ property_type + bed_type + host_has_profile_pic + 
-                  bedrooms + accommodates + bathrooms + beds + city +room_type + 
-                  cancellation_policy + cleaning_fee + host_identity_verified + 
-                  host_response_rate + instant_bookable + number_of_reviews + 
-                  review_scores_rating + has_review,  method="lm", trControl=control)
-set.seed(11082020)
-model8 <- train(data=Train, log(price) ~ .,  method="lm", trControl=control)
-```
-
-### Record RMSPE for log Models
-
-```{r, cache=FALSE}
-r1 <- model1$results$RMSE
-r2 <- model2$results$RMSE
-r3 <- model3$results$RMSE
-r4 <- model4$results$RMSE
-r5 <- model5$results$RMSE
-r6 <- model6$results$RMSE
-r7 <- model7$results$RMSE
-r8 <- model8$results$RMSE
-Model <- 1:8
-RMSPE <- c(r1, r2, r3, r4, r5, r6, r7, r8)
-Res <- data.frame(Model, RMSPE)
-```
-
-### RMSPE for Log Models
-
-Cross Validation Results for Log Model
-
-```{r, cache=FALSE}
-kable(Res)
-```
-
-### CV Results
-
-We see that model 6 was best at predicting price as well as predicting log(price). We can't compare these directly using the R output from `caret` because RMSPE is computed on different scales. 
-
-Instead, we'll convert the predictions for log(price) back to price, and calculate RMSPE ourselves for these two models. We partition the data into a training set, containing 80% of the data, and a test set, containing the remaining 20%, and repeat this procedure 10 times. This is not true cross-validation, since we aren't dividing into distinct folds, and withholding each fold once, but it has the same effect of evaluating the model on data not used to train it. 
-
-
-### Simulation for Comparing Models
-
-```{r}
-set.seed(11082020)
-RMSPE1 <- rep(NA, 10)
-RMSPE2 <- rep(NA, 10)
-for(i in 1:10){
-samp <- sample(1:1000, 200)
-Train2 <- Train[-samp, ]
-Validation <- Train[samp, ]
-M1 <- lm(data=Train2, price ~ bedrooms + accommodates + bathrooms + beds + 
-           city +room_type + cancellation_policy + cleaning_fee)
-M2 <- lm(data=Train2, log(price) ~ bedrooms + accommodates + bathrooms + beds + 
-           city +room_type + cancellation_policy + cleaning_fee)
-pred1 <- predict(M1, newdata=Validation)
-pred2 <- exp(predict(M2, newdata=Validation))
-RMSPE1[i] <- sqrt(mean((Validation$price - pred1)^2))
-RMSPE2[i] <- sqrt(mean((Validation$price - pred2)^2))
-}
-```
-
-### Comparison of Results
-
-```{r}
-mean(RMSPE1)
-mean(RMSPE2)
-```
-
-We see that we do slightly better when we do not use the log transform. 
-
-### Fit Model to Full Training Data Set
-
-```{r}
-M <- lm(data=Train, price ~ bedrooms + accommodates + bathrooms + beds + 
-           city +room_type + cancellation_policy + cleaning_fee)
-```
-
-
-### Check of Model Assumptions
-
-We'll create residual plots for this model. 
-
-```{r}
-library(gridExtra)
-P1 <- ggplot(data=data.frame(M$residuals), aes(y=M$residuals, x=M$fitted.values)) + geom_point() + 
-  ggtitle("Model Residual Plot") + xlab("Predicted Values") + ylab("Residuals")
-P2 <- ggplot(data=data.frame(M$residuals), aes(x=M$residuals)) + geom_histogram() + 
-  ggtitle("Histogram of Residuals") + xlab("Residual")
-P3 <- ggplot(data=data.frame(M$residuals), aes(sample = scale(M$residuals))) + stat_qq() + 
-  stat_qq_line() + xlab("Normal Quantiles") + ylab("Residual Quantiles") + ggtitle("Model QQ Plot")
-grid.arrange(P1, P2, P3, ncol=3)
-```
-
-
-### Residul by Predictor Plots
-
-```{r, fig.width=9}
-P1 <- ggplot(data=data.frame(M$residuals), aes(y=M$residuals, x=M$model$bedrooms)) + geom_point() + 
-  ggtitle("Model Residual Plot") + xlab("Bedrooms") + ylab("Residuals") 
-P2 <- ggplot(data=data.frame(M$residuals), aes(y=M$residuals, x=M$model$accommodates)) + geom_point() + 
-  ggtitle("Model Residual Plot") + xlab("Accommodates") + ylab("Residuals")
-P3 <- ggplot(data=data.frame(M$residuals), aes(y=M$residuals, x=M$model$bathrooms)) + geom_point() + 
-  ggtitle("Model Residual Plot") + xlab("Bathrooms") + ylab("Residuals")
-P4 <- ggplot(data=data.frame(M$residuals), aes(y=M$residuals, x=M$model$beds)) + geom_point() + 
-  ggtitle("Model Residual Plot") + xlab("Beds") + ylab("Residuals")
-grid.arrange(P1, P2, P3, P4, ncol=4)
-```
-
-
-### Predictions on Test Data
-
-```{r, error=TRUE}
-M <- lm(data=Train, log(price) ~ bedrooms + accommodates + bathrooms + beds + 
-           city +room_type + cancellation_policy + cleaning_fee)
-Predictions <- predict(M, newdata=Test)
-```
-
-### Modification of Test Data
-
-We'll change the super_strict_60 entry to "super_strict_30", which  seems like to closest match in the training data
-
-```{r}
-Test$cancellation_policy <- recode(Test$cancellation_policy, super_strict_60="super_strict_30")
-```
-
-Now, we make the predictions on the new data.
-
-### Predictions on Test Data
-
-```{r, cache=FALSE}
-M <- lm(data=Train, price ~ bedrooms + accommodates + bathrooms + beds + 
-           city +room_type + cancellation_policy + cleaning_fee)
-Predictions <- predict(M, newdata=Test)
-```
-
-### Check Predictions
-
-```{r, cache=FALSE}
-head(Predictions)
-```
-
-```{r, cache=FALSE}
-summary(Predictions)
-```
-
-### Save Predictions
-
-```{r}
-Test$price <- Predictions
-```
-
-```{r}
-write.csv(Test, file="Test_predictions.csv")
-```
-
 # Advanced Regression and Nonparametric Approaches
 
-## Penalized Regression: Ridge and Lasso
+## Ridge Regression
 
-### Regression on Air BnB Dataset - Some Exp. Vars. 
+### Regression on Housing Dataset - Some Exp. Vars. 
 
-```{r}
-M1 <- lm(data=Train, price ~ bedrooms + accommodates + bathrooms + beds + 
-           city +room_type + cancellation_policy + cleaning_fee)
-coef(M1)
+```{r, echo=FALSE}
+data("ames_raw")
+ames_raw <- as.data.frame(ames_raw)
+ames_raw <- ames_raw %>% mutate_if(is.character,as.factor)
+Ames_Num <- select_if(ames_raw, is.numeric)
+ames_raw <- ames_raw[complete.cases(Ames_Num),]
+ames_raw <- ames_raw %>% mutate_if(is.character, addNA)
+ames_raw <- ames_raw %>% mutate_if(is.factor, addNA)
+ames_raw$PID <- as.numeric(ames_raw$PID)
+ames_raw <- ames_raw %>% select( `Overall Qual`, `Year Built`, `Mas Vnr Area`, `Central Air`, `Gr Liv Area`, `Lot Frontage`, `1st Flr SF`, `Bedroom AbvGr`, `TotRms AbvGrd`, everything())
+ames_raw <- ames_raw %>% select(-c(Utilities, `Bldg Type`, `Exterior 2nd`, `Bsmt Cond`, `BsmtFin Type 1`, `Low Qual Fin SF`, `Total Bsmt SF`, `BsmtFin Type 2`, `Bsmt Cond`, `Exterior 1st`, `House Style`))
 ```
 
-### Regression on Air BnB Dataset - All Exp. Vars.
-
+```{r, echo=FALSE}
+set.seed(10302021)
+samp <- sample(1:nrow(ames_raw), 1000)
+Train_Data <- ames_raw[samp,]
+Test_Data <- ames_raw[samp,]
+Test_Data$SalePrice <- NA
+```
 
 ```{r}
-M2 <- lm(data=Train, price ~ .)
-head(coef(M2))
+M_OLS <- lm(data=Train_Data, SalePrice ~ .)
+head(coef(M_OLS),10) %>% round(3)
 ```
 
 ### Complexity in Model Coefficients
 
-* We've thought about complexity in terms of the number of terms we include in a model, as well as whether we include quadratic terms and interactions
+* We've thought about complexity in terms of the number of terms we include in a model, as well as whether we include quadratic terms and higher order terms and interactions
 
 * We can also think about model complexity in terms of the coefficients $b_1, \ldots, b_p$. 
 
-* Larger values of $b_1, \ldots, b_p$ are associated with more complex models. Smaller values of $b_0, b_1, \ldots, b_p$ are associated with less complex models. When $b_j=0$, this mean variable $j$ is not used in the model.   
+* Larger values of $b_1, \ldots, b_p$ are associated with more complex models. Smaller values of $b_1, \ldots, b_p$ are associated with less complex models. When $b_j=0$, this mean variable $j$ is not used in the model.   
 
-### Penalized Regression
+### Ridge Regression Penalty
 
 * We've seen that in ordinary least-squares regression, $b_0, b_1, \ldots, b_p$ are chosen in a way that to minimizes
 
@@ -8892,14 +8316,6 @@ head(coef(M2))
 * When $p$ is large, and we want to be careful of overfitting, a common approach is to add a "penalty term" to this function, to incentivize choosing low values of $b_1, \ldots, b_p$.    
 
 Specifically, we minimize:
-
-\[ \displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2 + \displaystyle\sum_{j=1}^pp(b_j) = \displaystyle\sum_{i=1}^n (y_i -(b_0 + b_1x_{i1} + b_2x_{i2} + \ldots + b_px_{ip}))^2 + \displaystyle\sum_{j=1}^pp(b_j)\], where $p$ is a function that increases as $b_j$ gets farther from 0.   
-
-### Ridge Regression
-
-In Ridge regression, we let $p_j(b_j) = b_j^2$. 
-
-Thus, $b_0, b_1, \ldots, b_p$ are chosen in a way that to minimizes
 
 $$
 \begin{aligned}
@@ -8911,130 +8327,9 @@ where $\lambda$ is a pre-determined positive constant.
 
 * Larger values of $b_j$ typically help the model better fit the training data, thereby making the first term smaller, but also make the second term larger. 
 
-* The idea is the find optimal values of $b_0, b_1, \ldots, b_p$ that are large enough to allow the model to fit the data well, thus keeping the first term (RSS) small, while also keeping the penalty term small as well.   
+* The idea is the find optimal values of $b_0, b_1, \ldots, b_p$ that are large enough to allow the model to fit the data well, thus keeping the first term (SSR) small, while also keeping the penalty term small as well.   
 
-
-### Simple Example
-
-```{r, echo=FALSE}
-set.seed(11132020)
-n <- 7
-x1 <- runif(7, 0, 10)
-x2 <- rnorm(7, 0, 1)
-x3 <- rnorm(7, 5, 3)
-x4 <- rbinom(7, 10, .2)
-x5 <- rbinom(7, 1, 0.5)
-y <-round( x1 + 3*x2 + 0.1*x4 + 5*x5 + rnorm(5, 0, 5),1)
-df <- data.frame(x1, x2, x3, x4, x5, y)
-```
-
-```{r}
-head(df)
-```
-
-### Standardizing
-
-* It is important to standardize each explanatory variable (i.e. subtract the mean and divide by the standard deviation).   
-
-* This ensures each variable has mean 0 and standard deviation 1. 
-
-* Without standardizing the optimal choice of $b_j$'s would depend on scale, with variables with larger absolute measurements having more influence.   
-
-* We'll standardize the response variable too. Though this is not strictly necessary, it doesn't hurt. We can always transform back if necessary. 
-
-* Standardization is performed using the `scale` command in R. 
-
-
-### Standardizing Dataframe
-
-```{r}
-df <- data.frame(scale(df))
-head(df)
-```
-
-### Ordinary Least-Squares Model
-
-
-```{r}
-M_OLS <- lm(data=df, y~.)
-summary(M_OLS)
-```
-
-### Ridge Regression Model ($\lambda=1$)
-
-```{r}
-M_Ridge1 <- lm.ridge(data=df, y~., lambda = 1)
-head(M_Ridge1$coef)
-```
-
-### Comparison of Coefficients
-
-```{r}
-b_OLS <- round(coef(M_OLS),3)
-b_Ridge1 <- round(c(0,M_Ridge1$coef),3)
-data.frame(b_OLS, b_Ridge1)
-```
-
-### Predictions and Residuals
-
-```{r, echo=FALSE}
-y <- df$y
-Pred_OLS <- predict(M_OLS)
-Pred_Ridge1 <- as.matrix(cbind(const=1,df[,1:5])) %*% coef(M_Ridge1)
-OLS_Resid <- y - Pred_OLS
-Ridge1_Resid <- y - Pred_Ridge1
-kable(data.frame(y, Pred_OLS, Pred_Ridge1, OLS_Resid, Ridge1_Resid))
-```
-
-* The ridge predictions tend to be closer to the mean y-value of 0.  
-
-### Choosing $b_j$ in OLS
-
-In OLS, we choose $b_0, b_1, \ldots, b_p$ are chosen in a way that minimizes
-
-\[ \displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2  = \displaystyle\sum_{i=1}^n (y_i -(b_0 + b_1x_{i1} + b_2x_{i2} + \ldots + b_px_{ip}))^2 \]
-
-```{r}
-sum((y-Pred_OLS)^2)
-```
-
-```{r}
-sum((y-Pred_Ridge1)^2)
-```
-
-Not surprisingly the OLS model achieves smaller $\displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2$. This has to be true, since the OLS coefficients are chosen to minimize this quantity.   
-
-
-### Penalty Term
-
-In Ridge regression, we penalize estimates that are far from 0. 
-
-```{r}
-sum(coef(M_OLS)[2:6]^2)
-```
-
-```{r}
-sum(coef(M_Ridge1)[2:6]^2)
-```
-
-### Choosing $b_j$ in Ridge Regression ($\lambda=1$)
-
-In ridge regression, we choose $b_0, b_1, \ldots, b_p$ are chosen in a way that minimizes
-
-$$
-\begin{aligned}
-Q=& \displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2  + \lambda\displaystyle\sum_{j=1}^pb_j^2\\ =  & \displaystyle\sum_{i=1}^n (y_i -(b_0 + b_1x_{i1} + b_2x_{i2} + \ldots + b_px_{ip}))^2 + \lambda\displaystyle\sum_{j=1}^pb_j^2
-\end{aligned}
-$$
-
-* Using the OLS coefficients, $\displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2 = 0.04663381$, and $\lambda\displaystyle\sum_{j=1}^pb_j^2=2.208408$, thus $Q=2.255042$.    
-
-* Using the Ridge coefficients, $\displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2 = 0.3841155$, and $\lambda\displaystyle\sum_{j=1}^pb_j^2=1.109008$, thus $Q=1.493124$.    
-
-It makes sense that Q is smaller, using the ridge coefficients. This must be true, since these coefficients were chosen to minimize Q.   
-
-
-### Other values of $\lambda$
+### Choosing $\lambda$
 
 The value of $\lambda$ is predetermined by the user. The larger the value of $\lambda$, the more heavily large $b_j's$ are penalized. A value of $\lambda=0$ corresponds to ordinary least-squares.  
 
@@ -9044,25 +8339,6 @@ Q=& \displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2  + \lambda\displaystyle\sum_{j=
 \end{aligned}
 $$
 
-### Predictions using $\lambda=0.5$, $\lambda=1$, $\lambda=2$
-
-```{r}
-M_Ridge0.5 <- lm.ridge(data=df, y~., lambda = 0.5)
-M_Ridge1 <- lm.ridge(data=df, y~., lambda = 1)
-M_Ridge2 <- lm.ridge(data=df, y~., lambda = 2)
-```
-
-
-```{r, echo=FALSE}
-y <- df$y
-Pred_OLS_0 <- predict(M_OLS)
-Pred_Ridge0.5 <- as.matrix(cbind(const=1,df[,1:5])) %*% coef(M_Ridge0.5)
-Pred_Ridge1 <- as.matrix(cbind(const=1,df[,1:5])) %*% coef(M_Ridge1)
-Pred_Ridge2 <- as.matrix(cbind(const=1,df[,1:5])) %*% coef(M_Ridge2)
-kable(data.frame(y, Pred_OLS_0, Pred_Ridge0.5, Pred_Ridge1, Pred_Ridge2))
-```
-
-* The smaller the value of $\lambda$, the more complex the model. As $\lambda$ gets large, the model becomes less complex, and predictions are pulled closer to $\bar{y}=0$. 
 
 ### Optimal value of $\lambda$
 
@@ -9084,47 +8360,143 @@ text("Bias^2", x=2.8, y=0.2, col="red")
 ```
 
 
-### Ridge Regression on AirBnB Dataset
+### Standardizing
 
 ```{r}
-Train_sc <- Train %>% mutate_if(is.numeric, scale)
+Train_sc <- Train_Data %>% mutate_if(is.numeric, scale)
 ```
 
+* It is important to standardize each explanatory variable (i.e. subtract the mean and divide by the standard deviation).   
+
+* This ensures each variable has mean 0 and standard deviation 1. 
+
+* Without standardizing the optimal choice of $b_j$'s would depend on scale, with variables with larger absolute measurements having more influence.   
+
+* We'll standardize the response variable too. Though this is not strictly necessary, it doesn't hurt. We can always transform back if necessary. 
+
+* Standardization is performed using the `scale` command in R. 
+
+### Ridge Regression on Housing Dataset
+
 ```{r}
-control = trainControl("repeatedcv", number = 5, repeats=5)
+control = trainControl("repeatedcv", number = 10, repeats=10)
 l_vals = 10^seq(-3, 3, length = 100)
 
 set.seed(11162020)
-AirBnB_ridge <- train(price ~., data = Train_sc, method = "glmnet", trControl=control , 
+Housing_ridge <- train(SalePrice ~ .,
+                       data = Train_sc, method = "glmnet", trControl=control , 
                       tuneGrid=expand.grid(alpha=0, lambda=l_vals))
 ```
 
 ```{r}
-AirBnB_ridge$bestTune$lambda
+Housing_ridge$bestTune$lambda
+```
+
+### Ridge Regression on Housing Dataset
+
+```{r}
+control = trainControl("repeatedcv", number = 10, repeats=10)
+l_vals = 10^seq(-3, 3, length = 100)
+
+set.seed(11162020)
+Housing_ridge <- train(SalePrice ~ .,
+                       data = Train_sc, method = "glmnet", trControl=control , 
+                      tuneGrid=expand.grid(alpha=0, lambda=l_vals))
+```
+
+```{r}
+Housing_ridge$bestTune$lambda
 ```
 
 ### Ridge Regression MSPE by $\lambda$
 
 ```{r, echo=FALSE}
-lambda <- AirBnB_ridge$results$lambda
-RMSPE <- AirBnB_ridge$results$RMSE
-ggplot(data=data.frame(lambda, RMSPE), aes(x=lambda, y=RMSPE))+geom_line() + xlim(c(0,2)) + ylim(c(0.75, 0.82)) + ggtitle("Ridge Regression Cross Validation Results")
+lambda <- Housing_ridge$results$lambda
+RMSPE <- Housing_ridge$results$RMSE
+ggplot(data=data.frame(lambda, RMSPE), aes(x=lambda, y=RMSPE))+geom_line() + xlim(c(0,2)) + ylim(c(0.45, 0.5)) + ggtitle("Ridge Regression Cross Validation Results")
 ```
 
 ### Ridge Regression Coefficients for Optimal Model
 
-```{r}
-OLS_AirBnB <- lm(data=Train_sc, price~.)
-OLS_coef <- coef(OLS_AirBnB)
-Ridge_coef <- coef(AirBnB_ridge$finalModel, AirBnB_ridge$bestTune$lambda)[,1]
-head(data.frame(OLS_coef, Ridge_coef),10)
+```{r, echo=FALSE}
+M_OLS_sc <- lm(data=Train_sc, SalePrice ~ .)
+OLS_coef <- M_OLS_sc$coefficients
+Ridge_coef <- coef(Housing_ridge$finalModel, Housing_ridge$bestTune$lambda)[,1]
+df <- data.frame(OLS_coef[2:10], Ridge_coef[2:10])
+names(df) <-c("OLS Coeff", "Ridge Coeff")
+df
 ```
+
+
+### OLS and Ridge Predictions   
+
+```{r}
+library(glmnet)
+MAT <- model.matrix(SalePrice~., data=Train_sc)
+ridge_mod <- glmnet(x=MAT, y=Train_sc$SalePrice, alpha = 0, lambda=Housing_ridge$bestTune$lambda )
+```
+
+```{r, echo=FALSE}
+y <- Train_sc$SalePrice
+Pred_OLS <- predict(M_OLS_sc)
+Pred_Ridge <- predict(ridge_mod, newx=MAT)
+OLS_Resid <- y - Pred_OLS
+Ridge_Resid <- y - Pred_Ridge
+Resdf <- data.frame(y, Pred_OLS, Pred_Ridge, OLS_Resid, Ridge_Resid)
+names(Resdf) <- c("y", "OLS Pred", "Ridge Pred", "OLS Resid", "Ridge Resid")
+kable(head(Resdf))
+```
+
+### Choosing $b_j$ in OLS
+
+In OLS, we choose $b_0, b_1, \ldots, b_p$ are chosen in a way that minimizes
+
+\[ \displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2  = \displaystyle\sum_{i=1}^n (y_i -(b_0 + b_1x_{i1} + b_2x_{i2} + \ldots + b_px_{ip}))^2 \]
+
+
+OLS: $\displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2$
+
+```{r}
+sum((y-Pred_OLS)^2)
+```
+
+Ridge: $\displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2$
+
+```{r}
+sum((y-Pred_Ridge)^2)
+```
+
+Not surprisingly the OLS model achieves smaller $\displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2$. This has to be true, since the OLS coefficients are chosen to minimize this quantity.   
+
+
+### Choosing $b_j$ in Ridge Regression 
+
+In ridge regression, $b_0, b_1, \ldots, b_p$ are chosen in a way that minimizes
+
+$$
+\begin{aligned}
+Q=& \displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2  + \lambda\displaystyle\sum_{j=1}^pb_j^2\\ =  & \displaystyle\sum_{i=1}^n (y_i -(b_0 + b_1x_{i1} + b_2x_{i2} + \ldots + b_px_{ip}))^2 + \lambda\displaystyle\sum_{j=1}^pb_j^2
+\end{aligned}
+$$
+
+OLS: $\displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2  + \lambda\displaystyle\sum_{j=1}^pb_j^2$
+
+```{r}
+sum((y-Pred_OLS)^2) + 0.6136*sum(coef(M_OLS_sc)[-1]^2) 
+```
+
+Ridge: $\displaystyle\sum_{i=1}^n (y_i -\hat{y}_i)^2  + \lambda\displaystyle\sum_{j=1}^pb_j^2$
+
+```{r}
+sum((y-Pred_Ridge)^2) + 0.6136*sum((Ridge_coef)[-1]^2)
+```
+
+We see that the ridge coefficients achieve a lower value of Q than the OLS ones. 
+
 
 ### Lasso Regression
 
-Lasso regression is very similar to ridge regression. We let $p_j(b_j) = |b_j|$. 
-
-Thus, $b_0, b_1, \ldots, b_p$ are chosen in a way that to minimizes
+Lasso regression is very similar to ridge regression. Coefficients $b_0, b_1, \ldots, b_p$ are chosen in a way that to minimizes
 
 $$
 \begin{aligned}
@@ -9133,60 +8505,9 @@ $$
 $$
 
 
-### Lasso Regression on AirBnB Dataset
-
-```{r}
-l_vals = 10^seq(-3, 3, length = 100)
-
-set.seed(11162020)
-AirBnB_lasso <- train(price ~., data = Train_sc, method = "glmnet", trControl=control, 
-                      tuneGrid=expand.grid(alpha=1, lambda=l_vals))
-```
-
-```{r}
-AirBnB_lasso$bestTune$lambda
-```
-
-### Lasso Regression MSPE by $\lambda$
-
-```{r, echo=FALSE}
-lambda <- AirBnB_lasso$results$lambda
-RMSPE <- AirBnB_lasso$results$RMSE
-ggplot(data=data.frame(lambda, RMSPE), aes(x=lambda, y=RMSPE))+geom_line() + xlim(c(0,0.25)) + ylim(c(0.75,0.85))  + ggtitle("Lasso Regression Cross Validation Results")
-```
-
-
-### OLS, Ridge, Lasso Coefficients
-
-```{r}
-OLS_AirBnB <- lm(data=Train_sc, price~.)
-OLS_coef <- coef(OLS_AirBnB)
-Lasso_coef <- coef(AirBnB_lasso$finalModel, AirBnB_lasso$bestTune$lambda)[,1]
-head(data.frame(OLS_coef, Ridge_coef, Lasso_coef),10)
-```
-
-### Comparing RMSPE for OLS, Lasso, Ridge 
-
-```{r}
-set.seed(11162020)
-AirBnB_OLS <- train(data=Train_sc, price ~ .,  method="lm", trControl=control)
-```
-
-```{r}
-min(AirBnB_OLS$results$RMSE)
-min(AirBnB_ridge$results$RMSE)
-min(AirBnB_lasso$results$RMSE)
-```
-
 ## Decision Trees
 
 ### Basics of Decision Trees
-
-```{r, echo=FALSE}
-Train <- Train %>% select(-c(last_review))
-Test <- Test %>% select(-c(last_review))
-```
-
 
 * A decision tree is a flexible alternative to a regression model. It is said to be **nonparametric** because it does not involve parameters like $\beta_0, \beta_1, \ldots \beta_p$.     
 
@@ -9202,13 +8523,13 @@ Test <- Test %>% select(-c(last_review))
 ```{r, echo=FALSE, fig.height=4.5, fig.width=11}
 library(rpart)
 library(rpart.plot)
-tree <- rpart(price~., data=Train, cp=0.04)
+tree <- rpart(SalePrice~., data=Train_Data, cp=0.04)
 rpart.plot(tree, box.palette="RdBu", shadow.col="gray", nn=TRUE, cex=1, extra=1)
 ```
 
-* The predicted price of an AirBnB with 3 bedrooms that accommodates 5 is $246.     
+* The predicted price of a House with overall quality 7, and was built in 1995 is $200,000.    
 
-* The predicted price of an AirBnB with 1 bedroom that that is a a full house or apartment (rather than private or shared room is $162).   
+* The predicted price of a House overall quality 8 and 1,750 sq. ft. on the first floor is $370,000. 
 
 ### Partitioning in A Decision Tree
 
@@ -9388,12 +8709,12 @@ rpart.plot(tree, box.palette="RdBu", shadow.col="gray", nn=TRUE, cex=1, extra=1)
 
 * Splitting continues until nodes reach a certain predetermined minimal size, or until change improvement in model fit drops below a predetermined value
 
-### Tree on AirBnB Data
+### Tree on Housing Data
 
-```{r, echo=FALSE, fig.height=4.5, fig.width=11}
+```{r, echo=FALSE, fig.height=15, fig.width=11}
 library(rpart)
 library(rpart.plot)
-tree <- rpart(price~., data=Train, cp=0.02)
+tree <- rpart(SalePrice~., data=Train_Data, cp=0.001)
 rpart.plot(tree, box.palette="RdBu", shadow.col="gray", nn=TRUE, cex=1, extra=1)
 ```
 
@@ -9412,34 +8733,47 @@ rpart.plot(tree, box.palette="RdBu", shadow.col="gray", nn=TRUE, cex=1, extra=1)
 
 
 
-### Cross-Validation on AirBnB Data
+### Cross-Validation on Housing Data
 
 ```{r}
-cp_vals = 10^seq(-3, 3, length = 100)
+cp_vals = 10^seq(-8, 1, length = 100)
+#cp_vals = c(0.00000001, 0.00001)
+colnames(Train_sc) <- make.names(colnames(Train_sc))
+#colnames(Train_Data) <- make.names(colnames(Train_Data))
+
 set.seed(11162020)
-AirBnB_Tree <- train(data=Train_sc, price ~ .,  method="rpart", trControl=control, 
+Housing_Tree <- train(data=Train_sc, SalePrice ~ .,  method="rpart", trControl=control, 
                      tuneGrid=expand.grid(cp=cp_vals))
-AirBnB_Tree$bestTune
+Housing_Tree$bestTune
 ```
 
 ```{r, echo=FALSE}
-cp <- AirBnB_Tree$results$cp
-RMSPE <- AirBnB_Tree$results$RMSE
-ggplot(data=data.frame(cp, RMSPE), aes(x=lambda, y=RMSPE))+geom_line() + xlim(c(0,0.05)) + ylim(c(0.75,0.85))  + 
+cp <- Housing_Tree$results$cp
+RMSPE <- Housing_Tree$results$RMSE
+ggplot(data=data.frame(cp, RMSPE), aes(x=cp, y=RMSPE))+geom_line() + xlim(c(0,0.001)) + ylim(c(0.475,0.485))  + 
   ggtitle("Regression Tree Cross Validation Results")
 ```
 
 
 ### Comparing OLS, Lasso, Ridge, and Tree
 
-```{r}
-min(AirBnB_OLS$results$RMSE)
-min(AirBnB_ridge$results$RMSE)
-min(AirBnB_lasso$results$RMSE)
-min(AirBnB_Tree$results$RMSE)
+```{r, echo=FALSE}
+set.seed(11162020)
+Housing_OLS <- train(data=Train_sc, SalePrice ~ .,  method="lm", trControl=control)
+set.seed(11162020)
+Housing_lasso <- train(SalePrice ~., data = Train_sc, method = "glmnet", trControl=control, 
+                      tuneGrid=expand.grid(alpha=1, lambda=l_vals))
 ```
 
-In this situation, the tree outperforms OLS, but does not do as well as lasso. The best model will vary depending on the nature of the data. We can use cross-validation to determine which model is likely to perform best in prediction.    
+
+```{r}
+min(Housing_OLS $results$RMSE)
+min(Housing_ridge$results$RMSE)
+min(Housing_lasso$results$RMSE)
+min(Housing_Tree$results$RMSE)
+```
+
+In this situation, the tree outperforms OLS, but does not do as well as lasso or ridge. The best model will vary depending on the nature of the data. We can use cross-validation to determine which model is likely to perform best in prediction.    
 
 
 ### Random Forest
@@ -9453,6 +8787,7 @@ In this situation, the tree outperforms OLS, but does not do as well as lasso. T
     2. when deciding on a split, only a random subset of explanatory variables are considered.    
     
 * Growing deep trees ensures low bias. In a random forest, averaging across many deep trees decreases variance, while maintaining low bias.   
+
 
 ## Regression Splines
 
@@ -9658,5 +8993,4 @@ Important Considerations:
 * degree of polynomial
 
 The best choices for all of these will vary between datasets and can be assessed through cross-validation.   
-
 --->
